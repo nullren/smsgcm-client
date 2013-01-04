@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.omgren.apps.smsgcm;
+package com.omgren.apps.smsgcm.client;
 
 import android.content.Context;
 import android.content.Intent;
@@ -51,7 +51,7 @@ public final class CommonUtilities {
      * Intent used to display a message in the screen.
      */
     static final String DISPLAY_MESSAGE_ACTION =
-            "com.omgren.apps.smsgcm.DISPLAY_MESSAGE";
+            "com.omgren.apps.smsgcm.client.DISPLAY_MESSAGE";
 
     /**
      * Intent's extra that contains the message to be displayed.

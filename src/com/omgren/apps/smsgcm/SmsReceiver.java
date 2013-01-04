@@ -1,4 +1,4 @@
-package com.omgren.apps.smsgcm;
+package com.omgren.apps.smsgcm.client;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,8 +10,8 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import static com.omgren.apps.smsgcm.CommonUtilities.displayMessage;
-import com.omgren.apps.smsgcm.SmsSender;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
+import com.omgren.apps.smsgcm.client.SmsSender;
 
 public class SmsReceiver extends BroadcastReceiver {
 	private static final String TAG = "SmsReceiver";

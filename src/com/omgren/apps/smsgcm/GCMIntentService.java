@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.omgren.apps.smsgcm;
+package com.omgren.apps.smsgcm.client;
 
-import static com.omgren.apps.smsgcm.CommonUtilities.SENDER_ID;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.SENDER_ID;
 
-import static com.omgren.apps.smsgcm.CommonUtilities.displayMessage;
-import static com.omgren.apps.smsgcm.CommonUtilities.httpDownloader;
-import com.omgren.apps.smsgcm.SmsMessageDummy;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.httpDownloader;
+import com.omgren.apps.smsgcm.client.SmsMessageDummy;
 
 import android.app.Notification;
 import android.app.NotificationManager;

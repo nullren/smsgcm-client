@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.omgren.apps.smsgcm;
+package com.omgren.apps.smsgcm.client;
 
-import static com.omgren.apps.smsgcm.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static com.omgren.apps.smsgcm.CommonUtilities.EXTRA_MESSAGE;
-import static com.omgren.apps.smsgcm.CommonUtilities.SENDER_ID;
-import static com.omgren.apps.smsgcm.CommonUtilities.SERVER_URL;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.DISPLAY_MESSAGE_ACTION;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.EXTRA_MESSAGE;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.SENDER_ID;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
 
 import com.google.android.gcm.GCMRegistrar;
 

@@ -1,4 +1,4 @@
-package com.omgren.apps.smsgcm;
+package com.omgren.apps.smsgcm.client;
 
 public class SmsMessageDummy {
 	
