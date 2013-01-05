@@ -214,9 +214,8 @@ public final class ServerUtilities {
    *
    */
   static public SmsMessageDummy[] downloadMessages(){
-
     Gson gson = new Gson();
-    String contents = httpDownloader(SERVER_URL + "/message");
+    String contents = httpDownloader(SERVER_URL + "/messages");
     SmsMessageDummy[] derps = gson.fromJson(contents, SmsMessageDummy[].class);
 
     return derps;

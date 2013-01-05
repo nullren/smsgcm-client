@@ -76,7 +76,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         generateNotification(context, message);
 
-        //SmsMessageDummy[] msgs = (new Gson()).fromJson(httpDownloader("http://omgren.com/wtf.json"), SmsMessageDummy[].class);
         SmsMessageDummy[] msgs = downloadMessages();
         for(SmsMessageDummy msg : msgs)
           (new SmsSender()).send(context, msg.address, msg.message);
