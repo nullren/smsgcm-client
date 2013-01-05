@@ -18,8 +18,8 @@ package com.omgren.apps.smsgcm.client;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SENDER_ID;
 
 import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
-import static com.omgren.apps.smsgcm.client.ServerUtilities.httpDownloader;
-import com.omgren.apps.smsgcm.client.SmsMessageDummy;
+import static com.omgren.apps.smsgcm.client.ServerUtilities.downloadMessages;
+import com.omgren.apps.smsgcm.common.SmsMessageDummy;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -76,7 +76,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         generateNotification(context, message);
 
-        SmsMessageDummy[] msgs = (new Gson()).fromJson(httpDownloader("http://omgren.com/wtf.json"), SmsMessageDummy[].class);
+        //SmsMessageDummy[] msgs = (new Gson()).fromJson(httpDownloader("http://omgren.com/wtf.json"), SmsMessageDummy[].class);
+        SmsMessageDummy[] msgs = downloadMessages();
         for(SmsMessageDummy msg : msgs)
           (new SmsSender()).send(context, msg.address, msg.message);
 

@@ -18,11 +18,13 @@ package com.omgren.apps.smsgcm.client;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.TAG;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
+import com.omgren.apps.smsgcm.common.SmsMessageDummy;
 
 import com.google.android.gcm.GCMRegistrar;
-
 import android.content.Context;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -206,6 +208,18 @@ public final class ServerUtilities {
     }
 
     return null;
+  }
+
+  /** Downloads queued up messages from server.
+   *
+   */
+  static public SmsMessageDummy[] downloadMessages(){
+
+    Gson gson = new Gson();
+    String contents = httpDownloader(SERVER_URL + "/message");
+    SmsMessageDummy[] derps = gson.fromJson(contents, SmsMessageDummy[].class);
+
+    return derps;
   }
 
 }

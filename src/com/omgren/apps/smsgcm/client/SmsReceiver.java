@@ -12,6 +12,7 @@ import android.util.Log;
 
 import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
 import com.omgren.apps.smsgcm.client.SmsSender;
+import com.omgren.apps.smsgcm.common.SmsMessageDummy;
 
 public class SmsReceiver extends BroadcastReceiver {
   private static final String TAG = "SmsReceiver";
