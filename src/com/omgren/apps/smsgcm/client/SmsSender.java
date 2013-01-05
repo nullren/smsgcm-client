@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
 
 public class SmsSender {
-	private static final String TAG = "SmsSender";
+  private static final String TAG = "SmsSender";
   public void send(Context context, String recipient, String message){
     SmsManager smsman = SmsManager.getDefault();
     ArrayList<String> msgs = smsman.divideMessage(message);

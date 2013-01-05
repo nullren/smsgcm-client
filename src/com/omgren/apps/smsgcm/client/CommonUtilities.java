@@ -32,72 +32,72 @@ import java.net.URL;
  */
 public final class CommonUtilities {
 
-    /**
-     * Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
-     */
-    static final String SERVER_URL = "http://awesome.omgren.com:8080/smsgcm";
+  /**
+   * Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
+   */
+  static final String SERVER_URL = "http://awesome.omgren.com:8080/smsgcm";
 
-    /**
-     * Google API project id registered to use GCM.
-     */
-    static final String SENDER_ID = "1034760575801";
+  /**
+   * Google API project id registered to use GCM.
+   */
+  static final String SENDER_ID = "1034760575801";
 
-    /**
-     * Tag used on log messages.
-     */
-    static final String TAG = "SMSGCM";
+  /**
+   * Tag used on log messages.
+   */
+  static final String TAG = "SMSGCM";
 
-    /**
-     * Intent used to display a message in the screen.
-     */
-    static final String DISPLAY_MESSAGE_ACTION =
-            "com.omgren.apps.smsgcm.client.DISPLAY_MESSAGE";
+  /**
+   * Intent used to display a message in the screen.
+   */
+  static final String DISPLAY_MESSAGE_ACTION =
+    "com.omgren.apps.smsgcm.client.DISPLAY_MESSAGE";
 
-    /**
-     * Intent's extra that contains the message to be displayed.
-     */
-    static final String EXTRA_MESSAGE = "message";
+  /**
+   * Intent's extra that contains the message to be displayed.
+   */
+  static final String EXTRA_MESSAGE = "message";
 
-    /**
-     * Notifies UI to display a message.
-     * <p>
-     * This method is defined in the common helper because it's used both by
-     * the UI and the background service.
-     *
-     * @param context application's context.
-     * @param message message to be displayed.
-     */
-    static void displayMessage(Context context, String message) {
-        Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        context.sendBroadcast(intent);
+  /**
+   * Notifies UI to display a message.
+   * <p>
+   * This method is defined in the common helper because it's used both by
+   * the UI and the background service.
+   *
+   * @param context application's context.
+   * @param message message to be displayed.
+   */
+  static void displayMessage(Context context, String message) {
+    Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
+    intent.putExtra(EXTRA_MESSAGE, message);
+    context.sendBroadcast(intent);
+  }
+
+  static public String httpDownloader(String u){
+    BufferedReader buf = null;
+    try {
+      URL url = new URL(u);
+      HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+      buf = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+      StringBuffer sb = new StringBuffer();
+      String buffer;
+      while((buffer = buf.readLine()) != null)
+        sb.append(buffer);
+
+      urlConnection.disconnect();
+      buf.close();
+
+      return sb.toString();
+
+    } catch (MalformedURLException e) {
+      Log.e(TAG, "bad url: " + u);
+    } catch (IOException e){
+      Log.e(TAG, "IOException");
+    } finally {
     }
-    
-    static public String httpDownloader(String u){
-    	BufferedReader buf = null;
-    	try {
-    		URL url = new URL(u);
-    		HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-    		buf = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-    		
-    		StringBuffer sb = new StringBuffer();
-    		String buffer;
-    		while((buffer = buf.readLine()) != null)
-    			sb.append(buffer);
-    		
-    		urlConnection.disconnect();
-    		buf.close();
-    		
-    		return sb.toString();
-    		
-    	} catch (MalformedURLException e) {
-    		Log.e(TAG, "bad url: " + u);
-    	} catch (IOException e){
-    		Log.e(TAG, "IOException");
-    	} finally {
-    	}
-    	
-    	return null;
-    }
-    
+
+    return null;
+  }
+
 }

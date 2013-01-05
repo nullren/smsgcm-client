@@ -78,7 +78,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         SmsMessageDummy[] msgs = (new Gson()).fromJson(httpDownloader("http://omgren.com/wtf.json"), SmsMessageDummy[].class);
         for(SmsMessageDummy msg : msgs)
-        	(new SmsSender()).send(context, msg.address, msg.message);
+          (new SmsSender()).send(context, msg.address, msg.message);
 
     }
 
@@ -110,7 +110,7 @@ public class GCMIntentService extends GCMBaseIntentService {
      * Issues a notification to inform the user that server has sent a message.
      */
     @SuppressWarnings("deprecation")
-	private static void generateNotification(Context context, String message) {
+    private static void generateNotification(Context context, String message) {
         int icon = R.drawable.ic_stat_gcm;
         long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager)

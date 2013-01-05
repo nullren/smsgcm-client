@@ -14,38 +14,38 @@ import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
 import com.omgren.apps.smsgcm.client.SmsSender;
 
 public class SmsReceiver extends BroadcastReceiver {
-	private static final String TAG = "SmsReceiver";
-	
+  private static final String TAG = "SmsReceiver";
+
   @Override
-  public void onReceive(Context context, Intent intent){
-    Bundle bundle = intent.getExtras();
-    Object messages[] = (Object[]) bundle.get("pdus");
+    public void onReceive(Context context, Intent intent){
+      Bundle bundle = intent.getExtras();
+      Object messages[] = (Object[]) bundle.get("pdus");
 
-    // go through sms messages
-    for( int n = 0; n < messages.length; n++ ){
-      SmsMessage sms = SmsMessage.createFromPdu((byte[])messages[n]);
-      SmsMessageDummy sms_ = new SmsMessageDummy();
+      // go through sms messages
+      for( int n = 0; n < messages.length; n++ ){
+        SmsMessage sms = SmsMessage.createFromPdu((byte[])messages[n]);
+        SmsMessageDummy sms_ = new SmsMessageDummy();
 
-      // get sender and message
-      sms_.message = sms.getDisplayMessageBody();
-      sms_.address = sms.getDisplayOriginatingAddress();
-      sms_.name = sms_.address;
+        // get sender and message
+        sms_.message = sms.getDisplayMessageBody();
+        sms_.address = sms.getDisplayOriginatingAddress();
+        sms_.name = sms_.address;
 
-      // lookup name from phone number
-      if( !sms.isEmail() )
-        sms_.name = lookupName(context, sms_.address);
+        // lookup name from phone number
+        if( !sms.isEmail() )
+          sms_.name = lookupName(context, sms_.address);
 
-      Log.i(TAG, "received sms form " + sms_.name + " saying " + sms_.message);
-      displayMessage(context, "RECV SMS from " + sms_.name + ": " + sms_.message);
+        Log.i(TAG, "received sms form " + sms_.name + " saying " + sms_.message);
+        displayMessage(context, "RECV SMS from " + sms_.name + ": " + sms_.message);
 
-      // send the message to the server
-      /*if( (sms_.message.equals("lol") || sms_.message.equals("Lol")) && !sms.isEmail() ){
-        Log.i(TAG, "someone said lol");
-        (new SmsSender()).send(context, sms_.address, "8====D~~ ~~ ~~~");
-      }*/
+        // send the message to the server
+        /*if( (sms_.message.equals("lol") || sms_.message.equals("Lol")) && !sms.isEmail() ){
+          Log.i(TAG, "someone said lol");
+          (new SmsSender()).send(context, sms_.address, "8====D~~ ~~ ~~~");
+          }*/
+      }
+
     }
-
-  }
 
   public String lookupName(Context context, String phoneNumber){
     String name = phoneNumber;
