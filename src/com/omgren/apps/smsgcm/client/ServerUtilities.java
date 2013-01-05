@@ -132,7 +132,7 @@ public final class ServerUtilities {
      *
      * @throws IOException propagated from POST.
      */
-    private static void post(String endpoint, Map<String, String> params)
+    public static void post(String endpoint, Map<String, String> params)
             throws IOException {
         URL url;
         try {
@@ -214,9 +214,10 @@ public final class ServerUtilities {
    *
    */
   static public SmsMessageDummy[] downloadMessages(){
-    Gson gson = new Gson();
     String contents = httpDownloader(SERVER_URL + "/messages");
-    SmsMessageDummy[] derps = gson.fromJson(contents, SmsMessageDummy[].class);
+    Log.i(TAG, "downloaded messages: " + contents);
+
+    SmsMessageDummy[] derps = (new Gson()).fromJson(contents, SmsMessageDummy[].class);
 
     return derps;
   }
