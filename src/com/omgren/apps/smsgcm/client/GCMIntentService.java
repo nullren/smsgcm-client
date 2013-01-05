@@ -18,7 +18,7 @@ package com.omgren.apps.smsgcm.client;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SENDER_ID;
 
 import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
-import static com.omgren.apps.smsgcm.client.CommonUtilities.httpDownloader;
+import static com.omgren.apps.smsgcm.client.ServerUtilities.httpDownloader;
 import com.omgren.apps.smsgcm.client.SmsMessageDummy;
 
 import android.app.Notification;

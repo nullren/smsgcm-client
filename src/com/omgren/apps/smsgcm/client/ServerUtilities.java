@@ -24,6 +24,8 @@ import com.google.android.gcm.GCMRegistrar;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -174,4 +176,36 @@ public final class ServerUtilities {
             }
         }
       }
+
+  /** Downloads HTTP content.
+   *
+   * @param u URL address.
+   */
+  static public String httpDownloader(String u){
+    BufferedReader buf = null;
+    try {
+      URL url = new URL(u);
+      HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+      buf = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+      StringBuffer sb = new StringBuffer();
+      String buffer;
+      while((buffer = buf.readLine()) != null)
+        sb.append(buffer);
+
+      urlConnection.disconnect();
+      buf.close();
+
+      return sb.toString();
+
+    } catch (MalformedURLException e) {
+      Log.e(TAG, "bad url: " + u);
+    } catch (IOException e){
+      Log.e(TAG, "IOException");
+    } finally {
+    }
+
+    return null;
+  }
+
 }

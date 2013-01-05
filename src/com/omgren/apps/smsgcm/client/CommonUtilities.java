@@ -19,13 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 /**
  * Helper class providing methods and constants common to other classes in the
  * app.
@@ -71,33 +64,6 @@ public final class CommonUtilities {
     Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
     intent.putExtra(EXTRA_MESSAGE, message);
     context.sendBroadcast(intent);
-  }
-
-  static public String httpDownloader(String u){
-    BufferedReader buf = null;
-    try {
-      URL url = new URL(u);
-      HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-      buf = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-
-      StringBuffer sb = new StringBuffer();
-      String buffer;
-      while((buffer = buf.readLine()) != null)
-        sb.append(buffer);
-
-      urlConnection.disconnect();
-      buf.close();
-
-      return sb.toString();
-
-    } catch (MalformedURLException e) {
-      Log.e(TAG, "bad url: " + u);
-    } catch (IOException e){
-      Log.e(TAG, "IOException");
-    } finally {
-    }
-
-    return null;
   }
 
 }
