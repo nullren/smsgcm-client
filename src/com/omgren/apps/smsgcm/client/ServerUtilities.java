@@ -196,10 +196,9 @@ public final class ServerUtilities {
       url = new URL(endpoint);
 
       InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
-      String truststorePassword = "blahblah";
 
       KeyStore truststore = KeyStore.getInstance("BKS");
-      truststore.load(truststoreLocation, truststorePassword.toCharArray());
+      truststore.load(truststoreLocation, "blahblah".toCharArray());
 
       TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(truststore);
