@@ -27,9 +27,11 @@ import java.util.Random;
 import java.io.InputStream;
 import java.security.KeyStore;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.HttpsURLConnection;
+import java.security.SecureRandom;
 
 /**
  * Helper class used to communicate with the demo server.
@@ -196,15 +198,22 @@ public final class ServerUtilities {
       url = new URL(endpoint);
 
       InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
+      InputStream keystoreLocation = context.getResources().openRawResource(R.raw.key_store);
 
       KeyStore truststore = KeyStore.getInstance("BKS");
       truststore.load(truststoreLocation, "blahblah".toCharArray());
 
+      KeyStore keystore = KeyStore.getInstance("PKCS12");
+      keystore.load(keystoreLocation, "".toCharArray());
+
       TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(truststore);
 
+      KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+      kmf.init(keystore, "".toCharArray());
+
       sslContext = SSLContext.getInstance("TLS");
-      sslContext.init(null, tmf.getTrustManagers(), null);
+      sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
 
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException("invalid url: " + endpoint);
