@@ -15,7 +15,7 @@ import java.util.Map;
 import java.io.IOException;
 
 import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
-import com.omgren.apps.smsgcm.client.SmsSender;
+import static com.omgren.apps.smsgcm.client.ServerUtilities.uploadMessage;
 import com.omgren.apps.smsgcm.common.SmsMessageDummy;
 
 public class SmsReceiver extends BroadcastReceiver {
@@ -44,16 +44,7 @@ public class SmsReceiver extends BroadcastReceiver {
         displayMessage(context, "RECV SMS from " + sms_.name + ": " + sms_.message);
 
         // send the message to the server
-        Map<String, String> args = new HashMap<String, String>();
-        args.put("name", sms_.name);
-        args.put("address", sms_.address);
-        args.put("message", sms_.message);
-
-        try {
-          ServerUtilities.post(CommonUtilities.SERVER_URL + "/receiveMessage", args);
-        } catch (IOException e) {
-          Log.i(TAG, "error sending message: " + e);
-        }
+        uploadMessage(sms_);
       }
 
     }

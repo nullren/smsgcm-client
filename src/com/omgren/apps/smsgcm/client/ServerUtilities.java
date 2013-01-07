@@ -164,9 +164,12 @@ public final class ServerUtilities {
         }
       }
 
-  /** Downloads HTTP content.
+  /**
+   * Downloads HTTP content.
    *
    * @param u URL address.
+   *
+   * @return content
    */
   static public String httpDownloader(String u){
     BufferedReader buf = null;
@@ -195,8 +198,10 @@ public final class ServerUtilities {
     return null;
   }
 
-  /** Downloads queued up messages from server.
+  /**
+   * Downloads messages queued by server to be sent over SMS.
    *
+   * @return list of messages
    */
   static public SmsMessageDummy[] downloadMessages(){
     String contents = httpDownloader(SERVER_URL + "/messages");
@@ -207,4 +212,22 @@ public final class ServerUtilities {
     return derps;
   }
 
+  /**
+   * Uploads messages to server received by phone's SMS.
+   *
+   * @param msg message received by phone
+   */
+  static public void uploadMessage(SmsMessageDummy msg){
+    // post uses a HashMap
+    Map<String, String> args = new HashMap<String, String>();
+    args.put("name", msg.name);
+    args.put("address", msg.address);
+    args.put("message", msg.message);
+
+    try {
+      post(SERVER_URL + "/receiveMessage", args);
+    } catch(IOException e){
+      Log.e(TAG, "Error uploading message: " + e);
+    }
+  }
 }
