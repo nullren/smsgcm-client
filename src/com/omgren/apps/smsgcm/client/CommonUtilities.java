@@ -13,7 +13,7 @@ public final class CommonUtilities {
   /**
    * Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
    */
-  static final String SERVER_URL = "http://awesome.omgren.com:8080/smsgcm";
+  static final String SERVER_URL = "https://awesome.omgren.com/smsgcm";
 
   /**
    * Google API project id registered to use GCM.
