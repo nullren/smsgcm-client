@@ -20,4 +20,6 @@ Apache License included in their demo application:
     See the License for the specific language governing permissions and
     limitations under the License.
 
-I don't know what i'm doing just yet.
+---------
+
+The counterpart for this application is located at [SMSGCM-server](https://bitbucket.org/nullren/smsgcm-server).
