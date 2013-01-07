@@ -24,6 +24,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import java.io.InputStream;
+import java.security.KeyStore;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.HttpsURLConnection;
+
 /**
  * Helper class used to communicate with the demo server.
  */
@@ -125,7 +132,7 @@ public final class ServerUtilities {
    */
   private static void post(String endpoint, Map<String, String> params) throws IOException {
     byte[] bytes = makeQueryString(params);
-    HttpURLConnection conn = null;
+    HttpsURLConnection conn = null;
     try {
       conn = urlConnect(endpoint);
       conn.setDoOutput(true);
@@ -182,14 +189,35 @@ public final class ServerUtilities {
    *
    * @throws IOException
    */
-  private static HttpURLConnection urlConnect(String endpoint) throws IOException {
+  private static HttpsURLConnection urlConnect(String endpoint) throws IOException {
     URL url;
+    SSLContext sslContext = null;
     try {
       url = new URL(endpoint);
+
+      InputStream truststoreLocation = MyApplication.getAppContext().getResources().openRawResource(R.raw.trust_store);
+      String truststorePassword = "blahblah";
+
+      KeyStore truststore = KeyStore.getInstance("BKS");
+      truststore.load(truststoreLocation, truststorePassword.toCharArray());
+
+      TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+      tmf.init(truststore);
+
+      sslContext = SSLContext.getInstance("TLS");
+      sslContext.init(null, tmf.getTrustManagers(), null);
+
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException("invalid url: " + endpoint);
+    } catch (Exception e) {
+      throw new IOException("bad ssl stuff: " + e);
     }
-    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+    HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+
+    if( sslContext != null )
+      conn.setSSLSocketFactory(sslContext.getSocketFactory());
+
     return conn;
   }
 
@@ -203,7 +231,7 @@ public final class ServerUtilities {
   private static String get(String url){
     BufferedReader buf = null;
     try {
-      HttpURLConnection conn = urlConnect(url);
+      HttpsURLConnection conn = urlConnect(url);
       buf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
       int status = conn.getResponseCode();
