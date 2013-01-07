@@ -44,7 +44,7 @@ public class SmsReceiver extends BroadcastReceiver {
         displayMessage(context, "RECV SMS from " + sms_.name + ": " + sms_.message);
 
         // send the message to the server
-        uploadMessage(sms_);
+        uploadMessage(context, sms_);
       }
 
     }

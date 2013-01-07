@@ -62,7 +62,7 @@ public final class ServerUtilities {
       try {
         displayMessage(context, context.getString(
               R.string.server_registering, i, MAX_ATTEMPTS));
-        post(serverUrl, params);
+        post(context, serverUrl, params);
         GCMRegistrar.setRegisteredOnServer(context, true);
         String message = context.getString(R.string.server_registered);
         CommonUtilities.displayMessage(context, message);
@@ -106,7 +106,7 @@ public final class ServerUtilities {
     Map<String, String> params = new HashMap<String, String>();
     params.put("regId", regId);
     try {
-      post(serverUrl, params);
+      post(context, serverUrl, params);
       GCMRegistrar.setRegisteredOnServer(context, false);
       String message = context.getString(R.string.server_unregistered);
       CommonUtilities.displayMessage(context, message);
@@ -130,11 +130,11 @@ public final class ServerUtilities {
    *
    * @throws IOException propagated from POST.
    */
-  private static void post(String endpoint, Map<String, String> params) throws IOException {
+  private static void post(final Context context, String endpoint, Map<String, String> params) throws IOException {
     byte[] bytes = makeQueryString(params);
     HttpsURLConnection conn = null;
     try {
-      conn = urlConnect(endpoint);
+      conn = urlConnect(context, endpoint);
       conn.setDoOutput(true);
       conn.setUseCaches(false);
       conn.setFixedLengthStreamingMode(bytes.length);
@@ -189,13 +189,13 @@ public final class ServerUtilities {
    *
    * @throws IOException
    */
-  private static HttpsURLConnection urlConnect(String endpoint) throws IOException {
+  private static HttpsURLConnection urlConnect(final Context context, String endpoint) throws IOException {
     URL url;
     SSLContext sslContext = null;
     try {
       url = new URL(endpoint);
 
-      InputStream truststoreLocation = MyApplication.getAppContext().getResources().openRawResource(R.raw.trust_store);
+      InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
       String truststorePassword = "blahblah";
 
       KeyStore truststore = KeyStore.getInstance("BKS");
@@ -228,10 +228,10 @@ public final class ServerUtilities {
    *
    * @return content of url address.
    */
-  private static String get(String url){
+  private static String get(final Context context, String url){
     BufferedReader buf = null;
     try {
-      HttpsURLConnection conn = urlConnect(url);
+      HttpsURLConnection conn = urlConnect(context, url);
       buf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
       int status = conn.getResponseCode();
@@ -262,8 +262,8 @@ public final class ServerUtilities {
    *
    * @return list of messages.
    */
-  public static SmsMessageDummy[] downloadMessages(){
-    String contents = get(SERVER_URL + "/messages");
+  public static SmsMessageDummy[] downloadMessages(final Context context){
+    String contents = get(context, SERVER_URL + "/messages");
     Log.i(TAG, "downloaded messages: " + contents);
 
     SmsMessageDummy[] derps = (new Gson()).fromJson(contents, SmsMessageDummy[].class);
@@ -276,7 +276,7 @@ public final class ServerUtilities {
    *
    * @param msg message received by phone
    */
-  public static void uploadMessage(SmsMessageDummy msg){
+  public static void uploadMessage(final Context context, SmsMessageDummy msg){
     // post uses a HashMap
     Map<String, String> args = new HashMap<String, String>();
     args.put("name", msg.name);
@@ -284,7 +284,7 @@ public final class ServerUtilities {
     args.put("message", msg.message);
 
     try {
-      post(SERVER_URL + "/receiveMessage", args);
+      post(context, SERVER_URL + "/receiveMessage", args);
     } catch(IOException e){
       Log.e(TAG, "Error uploading message: " + e);
     }
