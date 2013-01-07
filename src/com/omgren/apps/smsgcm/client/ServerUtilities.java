@@ -119,29 +119,10 @@ public final class ServerUtilities {
      */
     private static void post(String endpoint, Map<String, String> params)
             throws IOException {
-      URL url;
-      try {
-          url = new URL(endpoint);
-      } catch (MalformedURLException e) {
-          throw new IllegalArgumentException("invalid url: " + endpoint);
-      }
-      StringBuilder bodyBuilder = new StringBuilder();
-      Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
-      // constructs the POST body using the parameters
-      while (iterator.hasNext()) {
-          Entry<String, String> param = iterator.next();
-          bodyBuilder.append(param.getKey()).append('=')
-                  .append(param.getValue());
-          if (iterator.hasNext()) {
-              bodyBuilder.append('&');
-          }
-      }
-      String body = bodyBuilder.toString();
-      Log.v(TAG, "Posting '" + body + "' to " + url);
-      byte[] bytes = body.getBytes();
+      byte[] bytes = makeQueryString(params);
       HttpURLConnection conn = null;
       try {
-          conn = (HttpURLConnection) url.openConnection();
+          conn = urlConnect(endpoint);
           conn.setDoOutput(true);
           conn.setUseCaches(false);
           conn.setFixedLengthStreamingMode(bytes.length);
@@ -164,34 +145,64 @@ public final class ServerUtilities {
       }
     }
 
+    private static byte[] makeQueryString(Map<String, String> params){
+      StringBuilder bodyBuilder = new StringBuilder();
+      Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
+      // constructs the POST body using the parameters
+      while (iterator.hasNext()) {
+        Entry<String, String> param = iterator.next();
+        bodyBuilder.append(param.getKey()).append('=')
+          .append(param.getValue());
+        if (iterator.hasNext()) {
+          bodyBuilder.append('&');
+        }
+      }
+      String body = bodyBuilder.toString();
+      return body.getBytes();
+    }
+
+    private static HttpURLConnection urlConnect(String endpoint)
+            throws IOException {
+      URL url;
+      try {
+        url = new URL(endpoint);
+      } catch (MalformedURLException e) {
+        throw new IllegalArgumentException("invalid url: " + endpoint);
+      }
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      return conn;
+    }
+
   /**
    * Downloads HTTP content.
    *
-   * @param u URL address.
+   * @param url URL address.
    *
    * @return content
    */
-  private static String httpDownloader(String u){
+  private static String get(String url){
     BufferedReader buf = null;
     try {
-      URL url = new URL(u);
-      HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-      buf = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+      HttpURLConnection conn = urlConnect(url);
+      buf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+      int status = conn.getResponseCode();
+      if (status != 200) {
+        throw new IOException("Get failed with error code " + status);
+      }
 
       StringBuffer sb = new StringBuffer();
       String buffer;
       while((buffer = buf.readLine()) != null)
         sb.append(buffer);
 
-      urlConnection.disconnect();
+      conn.disconnect();
       buf.close();
 
       return sb.toString();
 
-    } catch (MalformedURLException e) {
-      Log.e(TAG, "bad url: " + u);
     } catch (IOException e){
-      Log.e(TAG, "IOException");
+      Log.e(TAG, "IOException: " + e);
     } finally {
     }
 
@@ -204,7 +215,7 @@ public final class ServerUtilities {
    * @return list of messages
    */
   public static SmsMessageDummy[] downloadMessages(){
-    String contents = httpDownloader(SERVER_URL + "/messages");
+    String contents = get(SERVER_URL + "/messages");
     Log.i(TAG, "downloaded messages: " + contents);
 
     SmsMessageDummy[] derps = (new Gson()).fromJson(contents, SmsMessageDummy[].class);
