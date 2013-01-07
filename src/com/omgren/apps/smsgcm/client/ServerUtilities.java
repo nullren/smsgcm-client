@@ -36,6 +36,9 @@ public final class ServerUtilities {
   /**
    * Register this account/device pair within the server.
    *
+   * @param context
+   * @param regId
+   *
    * @return whether the registration succeeded or not.
    */
   public static boolean register(final Context context, final String regId) {
@@ -86,6 +89,9 @@ public final class ServerUtilities {
 
   /**
    * Unregister this account/device pair within the server.
+   *
+   * @param context
+   * @param regId
    */
   public static void unregister(final Context context, final String regId) {
     Log.i(TAG, "unregistering device (regId = " + regId + ")");
@@ -144,6 +150,13 @@ public final class ServerUtilities {
     }
   }
 
+  /**
+   * Something to make a query string quickly.
+   *
+   * @param params A map of parameters
+   *
+   * @return a byte array of the query string
+   */
   private static byte[] makeQueryString(Map<String, String> params){
     StringBuilder bodyBuilder = new StringBuilder();
     Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
@@ -160,6 +173,15 @@ public final class ServerUtilities {
     return body.getBytes();
   }
 
+  /**
+   * Opens a HttpURLConnection object from the URL
+   *
+   * @param endpoint A url to connect to
+   *
+   * @return an HttpURLConnection object
+   *
+   * @throws IOException
+   */
   private static HttpURLConnection urlConnect(String endpoint) throws IOException {
     URL url;
     try {
@@ -176,7 +198,7 @@ public final class ServerUtilities {
    *
    * @param url URL address.
    *
-   * @return content
+   * @return content of url address.
    */
   private static String get(String url){
     BufferedReader buf = null;
@@ -210,7 +232,7 @@ public final class ServerUtilities {
   /**
    * Downloads messages queued by server to be sent over SMS.
    *
-   * @return list of messages
+   * @return list of messages.
    */
   public static SmsMessageDummy[] downloadMessages(){
     String contents = get(SERVER_URL + "/messages");
