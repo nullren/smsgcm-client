@@ -1,5 +1,5 @@
 bin
 gen
-local.properties
-proguard-project.txt
-project.properties
+#local.properties
+#proguard-project.txt
+#project.properties
