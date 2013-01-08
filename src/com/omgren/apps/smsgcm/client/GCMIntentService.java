@@ -62,8 +62,9 @@ public class GCMIntentService extends GCMBaseIntentService {
         generateNotification(context, message);
 
         SmsMessageDummy[] msgs = downloadMessages(context);
-        for(SmsMessageDummy msg : msgs)
-          (new SmsSender()).send(context, msg.address, msg.message);
+        if( msgs != null )
+          for(SmsMessageDummy msg : msgs)
+            (new SmsSender()).send(context, msg.address, msg.message);
 
     }
 
