@@ -27,41 +27,6 @@ import android.util.Log;
 public final class HttpUtilities {
 
   /**
-   * Issue a POST request to the server.
-   *
-   * @param endpoint POST address.
-   * @param params request parameters.
-   *
-   * @throws IOException propagated from POST.
-   */
-  public static void post(final Context context, String endpoint, Map<String, String> params) throws IOException {
-    byte[] bytes = makeQueryString(params);
-    HttpURLConnection conn = null;
-    try {
-      conn = urlConnect(context, endpoint);
-      conn.setDoOutput(true);
-      conn.setUseCaches(false);
-      conn.setFixedLengthStreamingMode(bytes.length);
-      conn.setRequestMethod("POST");
-      conn.setRequestProperty("Content-Type",
-          "application/x-www-form-urlencoded;charset=UTF-8");
-      // post the request
-      OutputStream out = conn.getOutputStream();
-      out.write(bytes);
-      out.close();
-      // handle the response
-      int status = conn.getResponseCode();
-      if (status != 200) {
-        throw new IOException("Post failed with error code " + status);
-      }
-    } finally {
-      if (conn != null) {
-        conn.disconnect();
-      }
-    }
-  }
-
-  /**
    * Something to make a query string quickly.
    *
    * @param params A map of parameters
@@ -151,6 +116,41 @@ public final class HttpUtilities {
     }
 
     return null;
+  }
+
+  /**
+   * Issue a POST request to the server.
+   *
+   * @param endpoint POST address.
+   * @param params request parameters.
+   *
+   * @throws IOException propagated from POST.
+   */
+  public static void post(final Context context, String endpoint, Map<String, String> params) throws IOException {
+    byte[] bytes = makeQueryString(params);
+    HttpURLConnection conn = null;
+    try {
+      conn = urlConnect(context, endpoint);
+      conn.setDoOutput(true);
+      conn.setUseCaches(false);
+      conn.setFixedLengthStreamingMode(bytes.length);
+      conn.setRequestMethod("POST");
+      conn.setRequestProperty("Content-Type",
+          "application/x-www-form-urlencoded;charset=UTF-8");
+      // post the request
+      OutputStream out = conn.getOutputStream();
+      out.write(bytes);
+      out.close();
+      // handle the response
+      int status = conn.getResponseCode();
+      if (status != 200) {
+        throw new IOException("Post failed with error code " + status);
+      }
+    } finally {
+      if (conn != null) {
+        conn.disconnect();
+      }
+    }
   }
 
 }
