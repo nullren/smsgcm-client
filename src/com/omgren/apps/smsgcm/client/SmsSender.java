@@ -19,7 +19,7 @@ public class SmsSender {
 
     record_sent(context, recipient, message);
     Log.i(TAG, "sent sms to " + recipient + " saying " + message);
-    displayMessage(context, "SEND SMS to " + recipient + ": " + message);
+    displayMessage(context, context.getString(R.string.sent_sms, recipient, message));
   }
 
   public void record_sent(Context context, String address, String message){

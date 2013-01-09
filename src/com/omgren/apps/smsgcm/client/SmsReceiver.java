@@ -41,7 +41,7 @@ public class SmsReceiver extends BroadcastReceiver {
           sms_.name = lookupName(context, sms_.address);
 
         Log.i(TAG, "received sms form " + sms_.name + " saying " + sms_.message);
-        displayMessage(context, "RECV SMS from " + sms_.name + ": " + sms_.message);
+        displayMessage(context, context.getString(R.string.recv_sms, sms_.name, sms_.message));
 
         // send the message to the server
         uploadMessage(context, sms_);
