@@ -1,0 +1,8 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="@string/pref_cert_title"
+                      android:key="pref_key_cert_settings">
+    <EditTextPreference android:key="pref_cert_password"
+                        android:title="@string/pref_cert_password"
+                        android:summary="@string/pref_cert_password_summary"/>
+  </PreferenceCategory>
+</PreferenceScreen>
