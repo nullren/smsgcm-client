@@ -40,16 +40,20 @@ Then send me your `csr.pem`, be sure to use your correct email.
 After I mail you back your certificate, eg `cert.pem`, you can
 then create the p12 file:
 
-    openssl pkcs12 -export -out key_store \
+    openssl pkcs12 -export -out my.p12 \
         -inkey key.pem -in cert.pem
 
-Remember your password as you will need it. Then move
-`key_store` to the directory `res/raw/`.
+Remember your password as you will need it.
 
 ### Compiling
 
 APIs 10 and 17 are required, as is the GCM API and Android Support
-Library. I think that is it. You should then be able to install
+Library. I think that is it.
+
+You then need to copy your `my.p12` file into `res/raw/` naming it
+`key_store.p12`.
+
+You should then be able to install
 the app onto your phone with `ant debug install`.
 
 ### Running
