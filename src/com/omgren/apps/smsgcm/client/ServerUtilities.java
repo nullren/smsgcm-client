@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.omgren.apps.smsgcm.common.SmsMessageDummy;
 
 /**
- * Helper class used to communicate with the demo server.
+ * Helper class used to communicate with the SMSGCM server.
  */
 public final class ServerUtilities {
 
