@@ -3,9 +3,9 @@ package com.omgren.apps.smsgcm.client;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SENDER_ID;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
 import static com.omgren.apps.smsgcm.client.ServerUtilities.downloadMessages;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+//import android.app.Notification;
+//import android.app.NotificationManager;
+//import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -55,7 +55,7 @@ public class GCMIntentService extends GCMBaseIntentService {
         Log.i(TAG, "Received GCM message");
         displayMessage(context, message);
 
-        generateNotification(context, message);
+        //generateNotification(context, message);
 
         SmsMessageDummy[] msgs = downloadMessages(context);
         if( msgs != null )
@@ -70,7 +70,7 @@ public class GCMIntentService extends GCMBaseIntentService {
         String message = getString(R.string.gcm_deleted, total);
         displayMessage(context, message);
         // notifies user
-        generateNotification(context, message);
+        //generateNotification(context, message);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     /**
      * Issues a notification to inform the user that server has sent a message.
-     */
+     *
     @SuppressWarnings("deprecation")
     private static void generateNotification(Context context, String message) {
         int icon = R.drawable.ic_stat_gcm;
@@ -109,5 +109,6 @@ public class GCMIntentService extends GCMBaseIntentService {
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         notificationManager.notify(0, notification);
     }
+    /**/
 
 }
