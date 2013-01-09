@@ -30,6 +30,8 @@
 			</intent-filter>
 		</activity>
 
+		<activity android:name=".SettingsActivity" />
+
 		<receiver android:name="com.google.android.gcm.GCMBroadcastReceiver"
 			android:permission="com.google.android.c2dm.permission.SEND">
 			<intent-filter>
