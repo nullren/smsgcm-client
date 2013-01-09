@@ -1,11 +1,8 @@
 package com.omgren.apps.smsgcm.client;
 
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SENDER_ID;
-
 import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
 import static com.omgren.apps.smsgcm.client.ServerUtilities.downloadMessages;
-import com.omgren.apps.smsgcm.common.SmsMessageDummy;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,10 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
+import com.omgren.apps.smsgcm.common.SmsMessageDummy;
 
 /**
  * IntentService responsible for handling GCM messages.

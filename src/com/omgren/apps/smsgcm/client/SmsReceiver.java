@@ -1,5 +1,7 @@
 package com.omgren.apps.smsgcm.client;
 
+import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
+import static com.omgren.apps.smsgcm.client.ServerUtilities.uploadMessage;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +12,6 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.io.IOException;
-
-import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
-import static com.omgren.apps.smsgcm.client.ServerUtilities.uploadMessage;
 import com.omgren.apps.smsgcm.common.SmsMessageDummy;
 
 public class SmsReceiver extends BroadcastReceiver {

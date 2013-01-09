@@ -4,21 +4,20 @@ import static com.omgren.apps.smsgcm.client.CommonUtilities.DISPLAY_MESSAGE_ACTI
 import static com.omgren.apps.smsgcm.client.CommonUtilities.EXTRA_MESSAGE;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SENDER_ID;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
-
-import com.google.android.gcm.GCMRegistrar;
-
 import android.app.Activity;
-import android.preference.PreferenceManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.google.android.gcm.GCMRegistrar;
 
 /**
  * Main UI for the demo app.

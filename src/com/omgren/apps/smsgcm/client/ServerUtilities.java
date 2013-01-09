@@ -1,38 +1,20 @@
 package com.omgren.apps.smsgcm.client;
 
+import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.TAG;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 import android.content.Context;
 import android.util.Log;
-import android.preference.PreferenceManager;
-import android.content.SharedPreferences;
+
 import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
 import com.omgren.apps.smsgcm.common.SmsMessageDummy;
-import java.io.BufferedReader;
-import java.io.UnsupportedEncodingException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
-import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
-import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
-import static com.omgren.apps.smsgcm.client.CommonUtilities.TAG;
-import static java.net.URLEncoder.encode;
-import java.security.KeyStoreException;
 
 /**
  * Helper class used to communicate with the demo server.

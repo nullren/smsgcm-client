@@ -1,14 +1,14 @@
 package com.omgren.apps.smsgcm.client;
 
-import android.telephony.SmsManager;
-import android.content.Context;
-import android.content.ContentValues;
-import android.net.Uri;
-import android.util.Log;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
 
 import java.util.ArrayList;
 
-import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
+import android.content.ContentValues;
+import android.content.Context;
+import android.net.Uri;
+import android.telephony.SmsManager;
+import android.util.Log;
 
 public class SmsSender {
   private static final String TAG = "SmsSender";

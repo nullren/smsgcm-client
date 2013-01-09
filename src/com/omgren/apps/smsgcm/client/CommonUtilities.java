@@ -2,7 +2,6 @@ package com.omgren.apps.smsgcm.client;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 /**
  * Helper class providing methods and constants common to other classes in the
