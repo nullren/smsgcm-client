@@ -290,6 +290,7 @@ public final class ServerUtilities {
     args.put("name", msg.name);
     args.put("address", msg.address);
     args.put("message", msg.message);
+    args.put("time", msg.time.toString());
 
     try {
       post(context, SERVER_URL + "/receiveMessage", args);
