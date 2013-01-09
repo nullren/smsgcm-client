@@ -1,37 +1,35 @@
 package com.omgren.apps.smsgcm.client;
 
-import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
-import static com.omgren.apps.smsgcm.client.CommonUtilities.TAG;
-import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
-import com.omgren.apps.smsgcm.common.SmsMessageDummy;
-
-import com.google.android.gcm.GCMRegistrar;
 import android.content.Context;
 import android.util.Log;
-
+import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
-
+import com.omgren.apps.smsgcm.common.SmsMessageDummy;
 import java.io.BufferedReader;
+import java.io.UnsupportedEncodingException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyStore;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-
-import java.io.InputStream;
-import java.security.KeyStore;
-import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.HttpsURLConnection;
-import java.security.SecureRandom;
+import javax.net.ssl.TrustManagerFactory;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.TAG;
+import static java.net.URLEncoder.encode;
 
 /**
  * Helper class used to communicate with the demo server.
@@ -172,8 +170,12 @@ public final class ServerUtilities {
     // constructs the POST body using the parameters
     while (iterator.hasNext()) {
       Entry<String, String> param = iterator.next();
-      bodyBuilder.append(param.getKey()).append('=')
-        .append(param.getValue());
+      try {
+        bodyBuilder.append(encode(param.getKey(), "UTF-8")).append('=')
+          .append(encode(param.getValue(), "UTF-8"));
+      } catch (UnsupportedEncodingException e) {
+        Log.e(TAG, "problem with encoding" + e);
+      }
       if (iterator.hasNext()) {
         bodyBuilder.append('&');
       }
