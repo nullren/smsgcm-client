@@ -7,6 +7,7 @@ public class SettingsActivity extends PreferenceActivity {
     public static final String PREFS_NAME = "SettingsFile";
     public static final String PREF_CERT_PASSWORD = "pref_cert_password";
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
