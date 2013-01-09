@@ -8,6 +8,7 @@ import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
 import com.google.android.gcm.GCMRegistrar;
 
 import android.app.Activity;
+import android.preference.PreferenceManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,8 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // load preferences :D
+        PreferenceManager.setDefaultValues(this, R.layout.settings, false);
         checkNotNull(SERVER_URL, "SERVER_URL");
         checkNotNull(SENDER_ID, "SENDER_ID");
         // Make sure the device has the proper dependencies.

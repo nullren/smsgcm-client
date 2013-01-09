@@ -2,6 +2,8 @@ package com.omgren.apps.smsgcm.client;
 
 import android.content.Context;
 import android.util.Log;
+import android.preference.PreferenceManager;
+import android.content.SharedPreferences;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
 import com.omgren.apps.smsgcm.common.SmsMessageDummy;
@@ -210,7 +212,7 @@ public final class ServerUtilities {
       tmf.init(truststore);
 
       // client cert password
-      SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+      SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
       String keystorePassword = sharedPref.getString(SettingsActivity.PREF_CERT_PASSWORD, "");
 
       // client cert
