@@ -35,6 +35,7 @@ public class SmsReceiver extends BroadcastReceiver {
         sms_.message = sms.getDisplayMessageBody();
         sms_.address = sms.getDisplayOriginatingAddress();
         sms_.name = sms_.address;
+        sms_.time = sms.getTimestampMillis();
 
         // lookup name from phone number
         if( !sms.isEmail() )

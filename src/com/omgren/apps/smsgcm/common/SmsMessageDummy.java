@@ -5,7 +5,7 @@ public class SmsMessageDummy {
   public String message;
   public String name;
   public String address;
-  public String time;
+  public Long time;
 
   public SmsMessageDummy(){
     //nada
