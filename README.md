@@ -6,20 +6,29 @@ This is just a quick little thing based off of
 
 Apache License included in their demo application:
 
-    Copyright 2012 Google Inc.
-    
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-    
-      http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
 
----------
+## What is this?
 
-The counterpart for this application is located at [SMSGCM-server](https://bitbucket.org/nullren/smsgcm-server).
+This is a stupid project I started so that one day I would be able to
+send and receive text messages from inside bitlbee. The first step was
+to create an application on the phone to send incoming text messages
+to the clients and to gather messages sent from the clients and send
+them over the air to my SMS recipients. There are other tools in
+existence that do this already.
+
+Things that make this unique are that I use Google Cloud Messaging to
+notify the phone of messages to be sent. Also, user accounts are
+handled by SSL certificates and revocation lists. This way, I don't
+have to deal with any authentication stuff.
+
+## Where is the server?
+
+This app requires a server to be the central hub of all the clients.
+It is a Tomcat web application and it can be found [here](https://bitbucket.org/nullren/smsgcm-server).
+
+## How do I install?
+
+The most important thing is creating your SSL client certificate. I am
+the CA for my server, so if you want to compile and use this app, you
+must first send me your csr. Otherwise, this is useless unless you
+implement your own server.
