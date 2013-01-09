@@ -206,7 +206,7 @@ public final class ServerUtilities {
       truststore.load(truststoreLocation, "blahblah".toCharArray());
 
       KeyStore keystore = KeyStore.getInstance("PKCS12");
-      keystore.load(keystoreLocation, "".toCharArray());
+      keystore.load(keystoreLocation, "smsgcm".toCharArray());
 
       TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(truststore);
