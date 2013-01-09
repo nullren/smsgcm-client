@@ -106,6 +106,9 @@ public class DemoActivity extends Activity {
             case R.id.options_unregister:
                 GCMRegistrar.unregister(this);
                 return true;
+            case R.id.options_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
             case R.id.options_clear:
                 mDisplay.setText(null);
                 return true;

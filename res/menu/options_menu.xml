@@ -10,6 +10,10 @@
         android:title="@string/options_unregister">
     </item>
     <item
+        android:id="@+id/options_settings"
+        android:title="@string/options_settings">
+    </item>
+    <item
         android:id="@+id/options_clear"
         android:title="@string/options_clear">
     </item>
