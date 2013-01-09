@@ -199,16 +199,23 @@ public final class ServerUtilities {
     try {
       url = new URL(endpoint);
 
-      InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
+      // CA cert store password
       String truststorePassword = "blahblah";
+      // CA cert store
+      InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
+
       KeyStore truststore = KeyStore.getInstance("BKS");
       truststore.load(truststoreLocation, truststorePassword.toCharArray());
       TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(truststore);
 
+      // client cert password
+      SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+      String keystorePassword = sharedPref.getString(SettingsActivity.PREF_CERT_PASSWORD, "");
 
+      // client cert
       InputStream keystoreLocation = context.getResources().openRawResource(R.raw.key_store);
-      String keystorePassword = "smsgcm";
+
       KeyStore keystore = KeyStore.getInstance("PKCS12");
       keystore.load(keystoreLocation, keystorePassword.toCharArray());
       KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
