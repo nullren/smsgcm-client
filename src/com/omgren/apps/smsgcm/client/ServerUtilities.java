@@ -114,8 +114,14 @@ public final class ServerUtilities {
    * @return list of messages.
    */
   public static SmsMessageDummy[] downloadMessages(final Context context){
-    String contents = HttpUtilities.get(context, SERVER_URL + "/messages");
-    Log.i(TAG, "downloaded messages: " + contents);
+    String contents = "[]";
+    try {
+      contents = HttpUtilities.get(context, SERVER_URL + "/messages");
+      Log.i(TAG, "downloaded messages: " + contents);
+    } catch (IOException e) {
+      String message = context.getString(R.string.server_download_error, e.getMessage());
+      displayMessage(context, message);
+    }
 
     SmsMessageDummy[] derps = (new Gson()).fromJson(contents, SmsMessageDummy[].class);
 

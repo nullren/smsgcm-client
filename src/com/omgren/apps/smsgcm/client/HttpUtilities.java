@@ -89,10 +89,12 @@ public final class HttpUtilities {
    *
    * @return content of url address.
    */
-  public static String get(final Context context, String url){
+  public static String get(final Context context, String url) throws IOException {
     BufferedReader buf = null;
+    HttpURLConnection conn = null;
+    String ret = null;
     try {
-      HttpURLConnection conn = urlConnect(context, url);
+      conn = urlConnect(context, url);
       buf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
       int status = conn.getResponseCode();
@@ -105,17 +107,15 @@ public final class HttpUtilities {
       while((buffer = buf.readLine()) != null)
         sb.append(buffer);
 
-      conn.disconnect();
       buf.close();
+      ret = sb.toString();
 
-      return sb.toString();
-
-    } catch (IOException e){
-      Log.e(TAG, "IOException: " + e);
     } finally {
+      if (conn != null)
+        conn.disconnect();
     }
 
-    return null;
+    return ret;
   }
 
   /**
