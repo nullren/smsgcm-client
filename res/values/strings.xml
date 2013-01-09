@@ -45,6 +45,8 @@
     <string name="pref_cert_title">Security Settings</string>
     <string name="pref_cert_password">PKCS12 Password</string>
     <string name="pref_cert_password_summary">This is the password you used when creating your .p12 file.</string>
+    <string name="pref_cert_import">Install from storage</string>
+    <string name="pref_cert_import_summary">Install credentials from storage device.</string>
     <string name="cert_password_warning">CREDENTIAL ERROR: Wrong password or corrupted file.</string>
     <string name="cert_not_loaded_warning">NO CREDENTIALS FOUND: Cannot find PKCS12 key store. Was it installed?</string>
     <string name="cert_not_installed">NO CREDENTIALS FOUND: Please copy your PKCS12 credentials to the folder Download named "smsgcm.p12".</string>
