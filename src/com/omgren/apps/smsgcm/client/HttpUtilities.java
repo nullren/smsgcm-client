@@ -1,31 +1,24 @@
 package com.omgren.apps.smsgcm.client;
 
 import static com.omgren.apps.smsgcm.client.CommonUtilities.TAG;
-import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
 import static java.net.URLEncoder.encode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.KeyStore;
-import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -43,7 +36,7 @@ public final class HttpUtilities {
    */
   public static void post(final Context context, String endpoint, Map<String, String> params) throws IOException {
     byte[] bytes = makeQueryString(params);
-    HttpsURLConnection conn = null;
+    HttpURLConnection conn = null;
     try {
       conn = urlConnect(context, endpoint);
       conn.setDoOutput(true);
@@ -104,12 +97,9 @@ public final class HttpUtilities {
    *
    * @throws IOException
    */
-  private static HttpsURLConnection urlConnect(final Context context, String endpoint) throws IOException {
+  private static HttpURLConnection urlConnect(final Context context, String endpoint) throws IOException {
     URL url;
-    SSLContext sslContext;
-    InputStream truststoreLocation, keystoreLocation;
-    KeyManagerFactory kmf;
-    TrustManagerFactory tmf;
+
     try {
       url = new URL(endpoint);
 
@@ -117,53 +107,12 @@ public final class HttpUtilities {
       throw new IllegalArgumentException("invalid url: " + endpoint);
     }
 
-    try {
-      // CA cert store password
-      String truststorePassword = "blahblah";
-      // CA cert store
-      truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
+    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-      KeyStore truststore = KeyStore.getInstance("BKS");
-      truststore.load(truststoreLocation, truststorePassword.toCharArray());
-      tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-      tmf.init(truststore);
-    } catch (Exception e) {
-      throw new IOException("could not load CA cert");
+    if( url.getHost().equals("smsgcm.omgren.com") ){
+      SSLContext sslContext = CertUtilities.getSSLContext(context);
+      ((HttpsURLConnection)conn).setSSLSocketFactory(sslContext.getSocketFactory());
     }
-
-    try {
-      // client cert
-      keystoreLocation = context.getResources().openRawResource(R.raw.key_store);
-    } catch (Exception e) {
-      displayMessage(context, context.getString(R.string.cert_not_loaded_warning));
-      throw new IOException("could not load client key file");
-    }
-
-    try {
-      // client cert password
-      SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-      String keystorePassword = sharedPref.getString(SettingsActivity.PREF_CERT_PASSWORD, "");
-
-      KeyStore keystore = KeyStore.getInstance("PKCS12");
-      keystore.load(keystoreLocation, keystorePassword.toCharArray());
-      kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-      kmf.init(keystore, "".toCharArray());
-    } catch (Exception e) {
-      displayMessage(context, context.getString(R.string.cert_password_warning));
-      throw new IOException("could not get client key");
-    }
-
-    try {
-      sslContext = SSLContext.getInstance("TLS");
-      sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
-    } catch (Exception e){
-      throw new IOException("bad ssl stuff: " + e);
-    }
-
-    HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-
-    if( sslContext != null )
-      conn.setSSLSocketFactory(sslContext.getSocketFactory());
 
     return conn;
   }
@@ -178,7 +127,7 @@ public final class HttpUtilities {
   public static String get(final Context context, String url){
     BufferedReader buf = null;
     try {
-      HttpsURLConnection conn = urlConnect(context, url);
+      HttpURLConnection conn = urlConnect(context, url);
       buf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
       int status = conn.getResponseCode();
