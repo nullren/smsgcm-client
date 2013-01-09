@@ -42,7 +42,9 @@
 
     <!--  settings -->
     <string name="pref_cert_title">SSL Certificate Settings</string>
-    <string name="pref_cert_password">PKCS#12 Password</string>
+    <string name="pref_cert_password">PKCS12 Password</string>
     <string name="pref_cert_password_summary">This is the password you used when creating your .p12 file.</string>
+    <string name="cert_password_warning">PKCS12 key store mac invalid - wrong password or corrupted file.</string>
+    <string name="cert_not_loaded_warning">Cannot find PKCS12 key store. Was it installed?</string>
 
 </resources>

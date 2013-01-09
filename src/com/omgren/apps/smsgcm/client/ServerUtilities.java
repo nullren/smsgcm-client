@@ -32,6 +32,7 @@ import static com.omgren.apps.smsgcm.client.CommonUtilities.displayMessage;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.TAG;
 import static java.net.URLEncoder.encode;
+import java.security.KeyStoreException;
 
 /**
  * Helper class used to communicate with the demo server.
@@ -67,7 +68,7 @@ public final class ServerUtilities {
         post(context, serverUrl, params);
         GCMRegistrar.setRegisteredOnServer(context, true);
         String message = context.getString(R.string.server_registered);
-        CommonUtilities.displayMessage(context, message);
+        displayMessage(context, message);
         return true;
       } catch (IOException e) {
         // Here we are simplifying and retrying on any error; in a real
@@ -92,7 +93,7 @@ public final class ServerUtilities {
     }
     String message = context.getString(R.string.server_register_error,
         MAX_ATTEMPTS);
-    CommonUtilities.displayMessage(context, message);
+    displayMessage(context, message);
     return false;
   }
 
@@ -111,7 +112,7 @@ public final class ServerUtilities {
       post(context, serverUrl, params);
       GCMRegistrar.setRegisteredOnServer(context, false);
       String message = context.getString(R.string.server_unregistered);
-      CommonUtilities.displayMessage(context, message);
+      displayMessage(context, message);
     } catch (IOException e) {
       // At this point the device is unregistered from GCM, but still
       // registered in the server.
@@ -120,7 +121,7 @@ public final class ServerUtilities {
       // a "NotRegistered" error message and should unregister the device.
       String message = context.getString(R.string.server_unregister_error,
           e.getMessage());
-      CommonUtilities.displayMessage(context, message);
+      displayMessage(context, message);
     }
   }
 
@@ -197,38 +198,57 @@ public final class ServerUtilities {
    */
   private static HttpsURLConnection urlConnect(final Context context, String endpoint) throws IOException {
     URL url;
-    SSLContext sslContext = null;
+    SSLContext sslContext;
+    InputStream truststoreLocation, keystoreLocation;
+    KeyManagerFactory kmf;
+    TrustManagerFactory tmf;
     try {
       url = new URL(endpoint);
 
+    } catch (MalformedURLException e) {
+      throw new IllegalArgumentException("invalid url: " + endpoint);
+    }
+
+    try {
       // CA cert store password
       String truststorePassword = "blahblah";
       // CA cert store
-      InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
+      truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
 
       KeyStore truststore = KeyStore.getInstance("BKS");
       truststore.load(truststoreLocation, truststorePassword.toCharArray());
-      TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+      tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(truststore);
+    } catch (Exception e) {
+      throw new IOException("could not load CA cert");
+    }
 
+    try {
+      // client cert
+      keystoreLocation = context.getResources().openRawResource(R.raw.key_store);
+    } catch (Exception e) {
+      displayMessage(context, context.getString(R.string.cert_not_loaded_warning));
+      throw new IOException("could not load client key file");
+    }
+
+    try {
       // client cert password
       SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
       String keystorePassword = sharedPref.getString(SettingsActivity.PREF_CERT_PASSWORD, "");
 
-      // client cert
-      InputStream keystoreLocation = context.getResources().openRawResource(R.raw.key_store);
-
       KeyStore keystore = KeyStore.getInstance("PKCS12");
       keystore.load(keystoreLocation, keystorePassword.toCharArray());
-      KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+      kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
       kmf.init(keystore, "".toCharArray());
+    } catch (Exception e) {
+      displayMessage(context, context.getString(R.string.cert_password_warning));
+      throw new IOException("could not get client key");
+    }
 
+    try {
       sslContext = SSLContext.getInstance("TLS");
       sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
-
-    } catch (MalformedURLException e) {
-      throw new IllegalArgumentException("invalid url: " + endpoint);
-    } catch (Exception e) {
+    } catch (Exception e){
       throw new IOException("bad ssl stuff: " + e);
     }
 
