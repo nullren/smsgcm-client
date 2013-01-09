@@ -22,7 +22,7 @@ import android.widget.TextView;
 /**
  * Main UI for the demo app.
  */
-public class DemoActivity extends Activity {
+public class MainActivity extends Activity {
 
     TextView mDisplay;
     AsyncTask<Void, Void, Void> mRegisterTask;
