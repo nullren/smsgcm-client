@@ -200,17 +200,17 @@ public final class ServerUtilities {
       url = new URL(endpoint);
 
       InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
-      InputStream keystoreLocation = context.getResources().openRawResource(R.raw.key_store);
-
+      String truststorePassword = "blahblah";
       KeyStore truststore = KeyStore.getInstance("BKS");
-      truststore.load(truststoreLocation, "blahblah".toCharArray());
-
-      KeyStore keystore = KeyStore.getInstance("PKCS12");
-      keystore.load(keystoreLocation, "smsgcm".toCharArray());
-
+      truststore.load(truststoreLocation, truststorePassword.toCharArray());
       TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(truststore);
 
+
+      InputStream keystoreLocation = context.getResources().openRawResource(R.raw.key_store);
+      String keystorePassword = "smsgcm";
+      KeyStore keystore = KeyStore.getInstance("PKCS12");
+      keystore.load(keystoreLocation, keystorePassword.toCharArray());
       KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
       kmf.init(keystore, "".toCharArray());
 
