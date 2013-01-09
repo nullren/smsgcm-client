@@ -7,8 +7,10 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
 import android.content.Context;
@@ -17,25 +19,28 @@ import android.preference.PreferenceManager;
 
 public final class CertUtilities {
 
-  public static SSLContext getSSLContext(final Context context) throws IOException {
-    SSLContext sslContext;
-    InputStream truststoreLocation, keystoreLocation;
-    KeyManagerFactory kmf;
+  private static TrustManager[] getTrustManagers(final Context context) throws IOException {
     TrustManagerFactory tmf;
-
     try {
       // CA cert store password
       String truststorePassword = "blahblah";
       // CA cert store
-      truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
+      InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
 
       KeyStore truststore = KeyStore.getInstance("BKS");
       truststore.load(truststoreLocation, truststorePassword.toCharArray());
       tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(truststore);
+      return tmf.getTrustManagers();
+
     } catch (Exception e) {
-      throw new IOException("could not load CA cert");
-    }
+      throw new IOException("could not load CA cert: " + e);
+    } 
+  }
+
+  private static KeyManager[] getKeyManagers(final Context context) throws IOException {
+    InputStream keystoreLocation;
+    KeyManagerFactory kmf;
 
     try {
       // client cert
@@ -54,14 +59,19 @@ public final class CertUtilities {
       keystore.load(keystoreLocation, keystorePassword.toCharArray());
       kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
       kmf.init(keystore, "".toCharArray());
+      return kmf.getKeyManagers();
     } catch (Exception e) {
       displayMessage(context, context.getString(R.string.cert_password_warning));
       throw new IOException("could not get client key");
     }
+  }
+
+  public static SSLContext getSSLContext(final Context cx) throws IOException {
+    SSLContext sslContext;
 
     try {
       sslContext = SSLContext.getInstance("TLS");
-      sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
+      sslContext.init(getKeyManagers(cx), getTrustManagers(cx), new SecureRandom());
     } catch (Exception e){
       throw new IOException("bad ssl stuff: " + e);
     }
