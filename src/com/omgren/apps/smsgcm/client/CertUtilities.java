@@ -90,8 +90,8 @@ public final class CertUtilities {
 
   private static InputStream getKeystoreFile(final Context context) throws IOException {
     try {
-      return context.openFileInput(FILENAME);
-      //return context.getResources().openRawResource(R.raw.key_store);
+      //return context.openFileInput(FILENAME);
+      return context.getResources().openRawResource(R.raw.key_store);
     } catch(Exception e) {
       displayMessage(context, context.getString(R.string.cert_not_loaded_warning));
       throw new IOException("could not load client key file: " + e);
