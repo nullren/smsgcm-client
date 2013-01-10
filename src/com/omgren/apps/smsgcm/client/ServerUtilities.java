@@ -52,6 +52,9 @@ public final class ServerUtilities {
         String message = context.getString(R.string.server_registered);
         displayMessage(context, message);
         return true;
+      } catch (CertException e) {
+        // having problems using ssl
+        return false;
       } catch (IOException e) {
         // Here we are simplifying and retrying on any error; in a real
         // application, it should retry only on unrecoverable errors
