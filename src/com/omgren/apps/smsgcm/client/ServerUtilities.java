@@ -54,6 +54,7 @@ public final class ServerUtilities {
         return true;
       } catch (CertException e) {
         // having problems using ssl
+        displayMessage(context, context.getString(R.string.server_aborted));
         return false;
       } catch (IOException e) {
         // Here we are simplifying and retrying on any error; in a real
