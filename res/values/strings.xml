@@ -34,6 +34,7 @@
     <string name="options_register">Register</string>
     <string name="options_unregister">Unregister</string>
     <string name="options_settings">Settings</string>
+    <string name="options_import">Import Key</string>
     <string name="options_clear">Clear</string>
     <string name="options_exit">Exit</string>
     <string name="hiding">hiding</string>
@@ -45,10 +46,14 @@
     <string name="pref_cert_title">Security Settings</string>
     <string name="pref_cert_password">PKCS12 Password</string>
     <string name="pref_cert_password_summary">This is the password you used when creating your .p12 file.</string>
+    <string name="pref_cert_import">Install from storage</string>
+    <string name="pref_cert_import_summary">Install credentials from storage device.</string>
     <string name="cert_password_warning">CREDENTIAL ERROR: Wrong password or corrupted file.</string>
+    <string name="cert_name">smsgcm.p12</string>
     <string name="cert_not_loaded_warning">NO CREDENTIALS FOUND: Cannot find PKCS12 key store. Was it installed?</string>
     <string name="cert_not_installed">NO CREDENTIALS FOUND: Please copy your PKCS12 credentials to the folder Download named "smsgcm.p12".</string>
     <string name="cert_transfer_error">CREDENTIAL TRANSFER ERROR: There was an error while securing your unsecured credentials.</string>
     <string name="cert_storage_unavailable">CREDENTIAL TRANSFER ERROR: Make sure that your device is not mounted to your computer.</string>
+    <string name="cert_imported">Successfully imported your credentials.</string>
 
 </resources>

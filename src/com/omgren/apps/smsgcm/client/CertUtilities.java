@@ -24,9 +24,7 @@ import android.preference.PreferenceManager;
 
 public final class CertUtilities {
 
-  private static String FILENAME = "keystore.p12";
-
-  private static TrustManager[] getTrustManagers(final Context context) throws IOException {
+  private static TrustManager[] getTrustManagers(final Context context) throws CertException {
     TrustManagerFactory tmf;
     try {
       // CA cert store password
@@ -41,31 +39,31 @@ public final class CertUtilities {
       return tmf.getTrustManagers();
 
     } catch (Exception e) {
-      throw new IOException("could not load CA cert: " + e);
+      throw new CertException("could not load CA cert: " + e);
     } 
   }
 
-  public static void copyKeystoreFile(final Context context) throws IOException {
-    //throw new IOException("not created this function yet!");
+  public static void copyKeystoreFile(final Context context) throws CertException, IOException {
+    //throw new CertException("not created this function yet!");
 
     // check we can read and write to storage
     String state = Environment.getExternalStorageState();
     if(!Environment.MEDIA_MOUNTED.equals(state)){
       displayMessage(context, context.getString(R.string.cert_storage_unavailable));
-      throw new IOException("device mounted");
+      throw new CertException("device mounted");
     }
 
     // look for the keystore in Download
     File path = Environment.getExternalStoragePublicDirectory(
                   Environment.DIRECTORY_DOWNLOADS);
-    File unsecuredKeystore = new File(path, FILENAME);
+    File unsecuredKeystore = new File(path, context.getString(R.string.cert_name));
     if( !unsecuredKeystore.exists() ){
       displayMessage(context, context.getString(R.string.cert_not_installed));
-      throw new IOException("smsgcm.p12 not exists");
+      throw new CertException("keystore does not exist in " + unsecuredKeystore.getAbsolutePath());
     }
 
     // load location of internal spot
-    FileOutputStream securedKeystore = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+    FileOutputStream securedKeystore = context.openFileOutput(context.getString(R.string.cert_name), Context.MODE_PRIVATE);
 
     // copy to internal spot
     FileChannel unsecureFile = new FileInputStream(unsecuredKeystore).getChannel();
@@ -74,7 +72,7 @@ public final class CertUtilities {
       unsecureFile.transferTo(0, unsecureFile.size(), secureFile);
     } catch (Exception e) {
       displayMessage(context, context.getString(R.string.cert_transfer_error));
-      throw new IOException("failed to copy credentials: " + e);
+      throw new CertException("failed to copy credentials: " + e);
     } finally {
       if( unsecureFile != null ) unsecureFile.close();
       if( secureFile != null ) secureFile.close();
@@ -84,21 +82,20 @@ public final class CertUtilities {
     try {
       unsecuredKeystore.delete();
     } catch (Exception e) {
-      throw new IOException("could not delete unsecured credentials: " + e);
+      throw new CertException("could not delete unsecured credentials: " + e);
     }
   }
 
-  private static InputStream getKeystoreFile(final Context context) throws IOException {
+  private static InputStream getKeystoreFile(final Context context) throws CertException {
     try {
-      //return context.openFileInput(FILENAME);
-      return context.getResources().openRawResource(R.raw.key_store);
+      return context.openFileInput(context.getString(R.string.cert_name));
     } catch(Exception e) {
       displayMessage(context, context.getString(R.string.cert_not_loaded_warning));
-      throw new IOException("could not load client key file: " + e);
+      throw new CertException("could not load client key file: " + e);
     }
   }
 
-  private static KeyManager[] getKeyManagers(final Context context) throws IOException {
+  private static KeyManager[] getKeyManagers(final Context context) throws CertException {
 
     InputStream keystoreLocation = getKeystoreFile(context);
     KeyManagerFactory kmf;
@@ -115,18 +112,18 @@ public final class CertUtilities {
       return kmf.getKeyManagers();
     } catch (Exception e) {
       displayMessage(context, context.getString(R.string.cert_password_warning));
-      throw new IOException("could not get client key");
+      throw new CertException("could not get client key");
     }
   }
 
-  public static SSLContext getSSLContext(final Context cx) throws IOException {
+  public static SSLContext getSSLContext(final Context cx) throws CertException {
     SSLContext sslContext;
 
     try {
       sslContext = SSLContext.getInstance("TLS");
       sslContext.init(getKeyManagers(cx), getTrustManagers(cx), new SecureRandom());
     } catch (Exception e){
-      throw new IOException("bad ssl stuff: " + e);
+      throw new CertException("bad ssl stuff: " + e);
     }
 
     return sslContext;

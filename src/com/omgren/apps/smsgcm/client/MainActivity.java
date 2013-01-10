@@ -1,6 +1,7 @@
 package com.omgren.apps.smsgcm.client;
 
 import static com.omgren.apps.smsgcm.client.CommonUtilities.DISPLAY_MESSAGE_ACTION;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.IMPORT_KEY_ACTION;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.EXTRA_MESSAGE;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SENDER_ID;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
@@ -41,8 +42,11 @@ public class MainActivity extends Activity {
         GCMRegistrar.checkManifest(this);
         setContentView(R.layout.main);
         mDisplay = (TextView) findViewById(R.id.display);
+
+        // register intents
         registerReceiver(mHandleMessageReceiver,
                 new IntentFilter(DISPLAY_MESSAGE_ACTION));
+
         final String regId = GCMRegistrar.getRegistrationId(this);
         if (regId.equals("")) {
             // Automatically registers application on startup.
@@ -107,6 +111,15 @@ public class MainActivity extends Activity {
                 return true;
             case R.id.options_unregister:
                 GCMRegistrar.unregister(this);
+                return true;
+            case R.id.options_import:
+                try {
+                  CertUtilities.copyKeystoreFile(this);
+                } catch(Exception e) {
+                  mDisplay.append(e + "\n");
+                  return true;
+                }
+                mDisplay.append(this.getString(R.string.cert_imported) + "\n");
                 return true;
             case R.id.options_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
