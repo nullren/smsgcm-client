@@ -140,7 +140,8 @@ public class MainActivity extends Activity {
             mRegisterTask.cancel(true);
         }
         unregisterReceiver(mHandleMessageReceiver);
-        GCMRegistrar.onDestroy(this);
+        GCMRegistrar.unregister(getApplicationContext());
+        GCMRegistrar.onDestroy(getApplicationContext());
         super.onDestroy();
     }
 
