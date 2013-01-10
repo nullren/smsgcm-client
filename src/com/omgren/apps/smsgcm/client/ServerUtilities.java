@@ -122,7 +122,7 @@ public final class ServerUtilities {
       contents = HttpUtilities.get(context, SERVER_URL + "/messages");
       Log.i(TAG, "downloaded messages: " + contents);
     } catch (IOException e) {
-      String message = context.getString(R.string.server_download_error, e.getMessage());
+      String message = context.getString(R.string.server_connect_error, e.getMessage());
       displayMessage(context, message);
     }
 
@@ -148,6 +148,8 @@ public final class ServerUtilities {
       HttpUtilities.post(context, SERVER_URL + "/receiveMessage", args);
     } catch(IOException e){
       Log.e(TAG, "Error uploading message: " + e);
+      String message = context.getString(R.string.server_connect_error, e.getMessage());
+      displayMessage(context, message);
     }
   }
 }
