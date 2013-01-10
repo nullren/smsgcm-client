@@ -47,10 +47,6 @@ public class MainActivity extends Activity {
         registerReceiver(mHandleMessageReceiver,
                 new IntentFilter(DISPLAY_MESSAGE_ACTION));
 
-        // register intents
-        registerReceiver(mHandleImportReceiver,
-                new IntentFilter(IMPORT_KEY_ACTION));
-
         final String regId = GCMRegistrar.getRegistrationId(this);
         if (regId.equals("")) {
             // Automatically registers application on startup.
@@ -136,7 +132,6 @@ public class MainActivity extends Activity {
             mRegisterTask.cancel(true);
         }
         unregisterReceiver(mHandleMessageReceiver);
-        unregisterReceiver(mHandleImportReceiver);
         GCMRegistrar.onDestroy(this);
         super.onDestroy();
     }
@@ -155,12 +150,6 @@ public class MainActivity extends Activity {
             String newMessage = intent.getExtras().getString(EXTRA_MESSAGE);
             mDisplay.append(newMessage + "\n");
         }
-    };
-
-    private final BroadcastReceiver mHandleImportReceiver = new BroadcastReceiver(){
-      @Override public void onReceive(Context context, Intent intent){
-    	  mDisplay.append("holy shit i got an intent\n");
-      }
     };
 
 }

@@ -49,6 +49,12 @@
       </intent-filter>
     </receiver>
 
+    <receiver android:name=".ImportReceiver" android:enabled="true">
+      <intent-filter>
+        <action android:name="com.omgren.apps.smsgcm.client.IMPORT_KEY" />
+      </intent-filter>
+    </receiver>
+
     <service android:name=".GCMIntentService" />
   </application>
 
