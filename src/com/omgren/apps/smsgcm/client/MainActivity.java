@@ -112,6 +112,13 @@ public class MainActivity extends Activity {
             case R.id.options_unregister:
                 GCMRegistrar.unregister(this);
                 return true;
+            case R.id.options_import:
+                try {
+                  CertUtilities.copyKeystoreFile(this);
+                } catch(Exception e) {
+                  mDisplay.append(e + "\n");
+                }
+                return true;
             case R.id.options_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;

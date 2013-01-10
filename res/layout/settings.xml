@@ -8,10 +8,9 @@
                         android:title="@string/pref_cert_password"
                         android:defaultValue="changeit"
                         android:summary="@string/pref_cert_password_summary"/>
-    <Preference android:key="pref_cert_import"
-                android:title="@string/pref_cert_import"
+    <!--<Preference android:title="@string/pref_cert_import"
                 android:summary="@string/pref_cert_import_summary">
       <intent android:action="com.omgren.apps.smsgcm.client.IMPORT_KEY"/>
-    </Preference>
+    </Preference>-->
   </PreferenceCategory>
 </PreferenceScreen>
