@@ -1,7 +1,6 @@
 package com.omgren.apps.smsgcm.client;
 
 import static com.omgren.apps.smsgcm.client.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static com.omgren.apps.smsgcm.client.CommonUtilities.IMPORT_KEY_ACTION;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.EXTRA_MESSAGE;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SENDER_ID;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;

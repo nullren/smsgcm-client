@@ -51,7 +51,7 @@ public class GCMIntentService extends GCMBaseIntentService {
      */
     @Override
     protected void onMessage(Context context, Intent intent) {
-        String message = getString(R.string.gcm_message);
+        //String message = getString(R.string.gcm_message);
         Log.i(TAG, "Received GCM message");
         //displayMessage(context, message);
 
@@ -67,7 +67,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onDeletedMessages(Context context, int total) {
         Log.i(TAG, "Received deleted messages notification");
-        String message = getString(R.string.gcm_deleted, total);
+        //String message = getString(R.string.gcm_deleted, total);
         //displayMessage(context, message);
         // notifies user
         //generateNotification(context, message);
