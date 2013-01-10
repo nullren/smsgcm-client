@@ -24,8 +24,6 @@ import android.preference.PreferenceManager;
 
 public final class CertUtilities {
 
-  private static String FILENAME = "keystore.p12";
-
   private static TrustManager[] getTrustManagers(final Context context) throws CertException {
     TrustManagerFactory tmf;
     try {
@@ -58,14 +56,14 @@ public final class CertUtilities {
     // look for the keystore in Download
     File path = Environment.getExternalStoragePublicDirectory(
                   Environment.DIRECTORY_DOWNLOADS);
-    File unsecuredKeystore = new File(path, FILENAME);
+    File unsecuredKeystore = new File(path, context.getString(R.string.cert_name));
     if( !unsecuredKeystore.exists() ){
       displayMessage(context, context.getString(R.string.cert_not_installed));
-      throw new CertException("smsgcm.p12 not exists");
+      throw new CertException("keystore does not exist in " + unsecuredKeystore.getAbsolutePath());
     }
 
     // load location of internal spot
-    FileOutputStream securedKeystore = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+    FileOutputStream securedKeystore = context.openFileOutput(context.getString(R.string.cert_name), Context.MODE_PRIVATE);
 
     // copy to internal spot
     FileChannel unsecureFile = new FileInputStream(unsecuredKeystore).getChannel();
@@ -90,7 +88,7 @@ public final class CertUtilities {
 
   private static InputStream getKeystoreFile(final Context context) throws CertException {
     try {
-      return context.openFileInput(FILENAME);
+      return context.openFileInput(context.getString(R.string.cert_name));
       //return context.getResources().openRawResource(R.raw.key_store);
     } catch(Exception e) {
       displayMessage(context, context.getString(R.string.cert_not_loaded_warning));

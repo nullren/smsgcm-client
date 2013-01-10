@@ -117,7 +117,9 @@ public class MainActivity extends Activity {
                   CertUtilities.copyKeystoreFile(this);
                 } catch(Exception e) {
                   mDisplay.append(e + "\n");
+                  return true;
                 }
+                mDisplay.append(this.getString(R.string.cert_imported) + "\n");
                 return true;
             case R.id.options_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
