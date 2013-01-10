@@ -156,6 +156,10 @@ public class MainActivity extends Activity {
         }
     };
 
-    private final ImportReceiver mHandleImportReceiver = new ImportReceiver();
+    private final BroadcastReceiver mHandleImportReceiver = new BroadcastReceiver(){
+      @Override public void onReceive(Context context, Intent intent){
+    	  mDisplay.append("holy shit i got an intent\n");
+      }
+    };
 
 }
