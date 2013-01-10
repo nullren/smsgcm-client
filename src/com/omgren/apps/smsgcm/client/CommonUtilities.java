@@ -30,6 +30,8 @@ public final class CommonUtilities {
   static final String DISPLAY_MESSAGE_ACTION =
     "com.omgren.apps.smsgcm.client.DISPLAY_MESSAGE";
 
+  static final String IMPORT_KEY_ACTION =
+    "com.omgren.apps.smsgcm.client.IMPORT_KEY";
   /**
    * Intent's extra that contains the message to be displayed.
    */

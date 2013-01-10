@@ -1,6 +1,7 @@
 package com.omgren.apps.smsgcm.client;
 
 import static com.omgren.apps.smsgcm.client.CommonUtilities.DISPLAY_MESSAGE_ACTION;
+import static com.omgren.apps.smsgcm.client.CommonUtilities.IMPORT_KEY_ACTION;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.EXTRA_MESSAGE;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SENDER_ID;
 import static com.omgren.apps.smsgcm.client.CommonUtilities.SERVER_URL;
@@ -41,8 +42,15 @@ public class MainActivity extends Activity {
         GCMRegistrar.checkManifest(this);
         setContentView(R.layout.main);
         mDisplay = (TextView) findViewById(R.id.display);
+
+        // register intents
         registerReceiver(mHandleMessageReceiver,
                 new IntentFilter(DISPLAY_MESSAGE_ACTION));
+
+        // register intents
+        registerReceiver(mHandleImportReceiver,
+                new IntentFilter(IMPORT_KEY_ACTION));
+
         final String regId = GCMRegistrar.getRegistrationId(this);
         if (regId.equals("")) {
             // Automatically registers application on startup.
@@ -147,5 +155,7 @@ public class MainActivity extends Activity {
             mDisplay.append(newMessage + "\n");
         }
     };
+
+    private final ImportReceiver mHandleImportReceiver = new ImportReceiver();
 
 }
