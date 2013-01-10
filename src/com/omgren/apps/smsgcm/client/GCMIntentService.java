@@ -28,14 +28,14 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onRegistered(Context context, String registrationId) {
         Log.i(TAG, "Device registered: regId = " + registrationId);
-        displayMessage(context, getString(R.string.gcm_registered));
+        //displayMessage(context, getString(R.string.gcm_registered));
         ServerUtilities.register(context, registrationId);
     }
 
     @Override
     protected void onUnregistered(Context context, String registrationId) {
         Log.i(TAG, "Device unregistered");
-        displayMessage(context, getString(R.string.gcm_unregistered));
+        //displayMessage(context, getString(R.string.gcm_unregistered));
         if (GCMRegistrar.isRegisteredOnServer(context)) {
             ServerUtilities.unregister(context, registrationId);
         } else {
@@ -53,7 +53,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     protected void onMessage(Context context, Intent intent) {
         String message = getString(R.string.gcm_message);
         Log.i(TAG, "Received GCM message");
-        displayMessage(context, message);
+        //displayMessage(context, message);
 
         //generateNotification(context, message);
 
@@ -68,7 +68,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     protected void onDeletedMessages(Context context, int total) {
         Log.i(TAG, "Received deleted messages notification");
         String message = getString(R.string.gcm_deleted, total);
-        displayMessage(context, message);
+        //displayMessage(context, message);
         // notifies user
         //generateNotification(context, message);
     }
