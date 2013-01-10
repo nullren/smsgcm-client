@@ -48,20 +48,23 @@ Remember your password as you will need it.
 ### Compiling
 
 APIs 10 and 17 are required, as is the GCM API and Android Support
-Library. I think that is it.
-
-You then need to copy your `my.p12` file into `res/raw/` naming it
-`key_store.p12`.
-
-You should then be able to install
+Library. I think that is it. You should then be able to install
 the app onto your phone with `ant debug install`.
 
 ### Running
 
-You will likely need to input the password you used when setting
-up your PKCS12 keystore. You can set it by going to the program
-settings and inputting it. Unregistering, then Re-registering
-should be enough to get you reconnected.
+Copy the .p12 keystore you created onto your phone. It must be on
+`Download` on your sdcard and must be named `smsgcm.p12`. You can
+do this with `adb`:
+
+    adb push my.p12 /mnt/sdcard/Download/smsgcm.p12
+
+Then in the application, go to `Settings` and input the passphrase
+you used when creating the keystore.
+
+Now go to `Import` to move the key into your app's private storage.
+
+Now go to `Register` and see the app connect to the server.
 
 ## Where is the server?
 
