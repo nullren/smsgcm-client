@@ -69,5 +69,5 @@ Now go to `Register` and see the app connect to the server.
 ## Where is the server?
 
 This app requires a server to be the central hub of all the clients.
-It is a Tomcat web application and it can be found [here](https://bitbucket.org/nullren/smsgcm-server).
+It is a Tomcat web application and it can be found [here](https://github.com/nullren/smsgcm-server).
 
