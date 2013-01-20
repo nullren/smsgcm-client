@@ -95,7 +95,7 @@ public final class HttpUtilities {
     String ret = null;
     try {
       conn = urlConnect(context, url);
-      buf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+      buf = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
 
       int status = conn.getResponseCode();
       if (status != 200) {
