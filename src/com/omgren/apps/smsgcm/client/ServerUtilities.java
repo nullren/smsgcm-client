@@ -11,6 +11,7 @@ import java.util.Random;
 
 import android.content.Context;
 import android.util.Log;
+import android.os.AsyncTask;
 
 import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
@@ -132,25 +133,41 @@ public final class ServerUtilities {
     return derps;
   }
 
+  public static AsyncTask<Void, Void, Void> mUploadTask;
   /**
    * Uploads messages to server received by phone's SMS.
    *
    * @param msg message received by phone
    */
-  public static void uploadMessage(final Context context, SmsMessageDummy msg){
-    // post uses a HashMap
-    Map<String, String> args = new HashMap<String, String>();
-    args.put("name", msg.name);
-    args.put("address", msg.address);
-    args.put("message", msg.message);
-    args.put("time", msg.time.toString());
+  public static void uploadMessage(final Context context, final SmsMessageDummy msg){
+    mUploadTask = new AsyncTask<Void, Void, Void>() {
 
-    try {
-      HttpUtilities.post(context, SERVER_URL + "/receiveMessage", args);
-    } catch(IOException e){
-      Log.e(TAG, "Error uploading message: " + e);
-      String message = context.getString(R.string.server_connect_error, e.getMessage());
-      displayMessage(context, message);
-    }
+      @Override
+      protected Void doInBackground(Void... params){
+        // post uses a HashMap
+        Map<String, String> args = new HashMap<String, String>();
+        args.put("name", msg.name);
+        args.put("address", msg.address);
+        args.put("message", msg.message);
+        args.put("time", msg.time.toString());
+
+        try {
+          HttpUtilities.post(context, SERVER_URL + "/receiveMessage", args);
+        } catch(IOException e){
+          Log.e(TAG, "Error uploading message: " + e);
+          String message = context.getString(R.string.server_connect_error, e.getMessage());
+          displayMessage(context, message);
+        }
+
+        return null;
+      }
+
+      @Override
+      protected void onPostExecute(Void result){
+        mUploadTask = null;
+      }
+
+    };
+    mUploadTask.execute(null,null,null);
   }
 }
