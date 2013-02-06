@@ -30,7 +30,11 @@ implement your own server.
 
 ### Set Up PKCS12 Keystore
 
-First step is to create your private key and certificate signing 
+Download a copy of my CA certificate:
+
+    wget http://omgren.com/ca.crt
+
+Next step is to create your private key and certificate signing 
 request. This can be done in one command:
 
     openssl req -new -newkey rsa:2048 -nodes \
@@ -41,7 +45,8 @@ After I mail you back your certificate, eg `cert.pem`, you can
 then create the p12 file:
 
     openssl pkcs12 -export -out my.p12 \
-        -inkey key.pem -in cert.pem
+        -inkey key.pem -in cert.pem \
+        -certfile ca.crt -caname "omgren.com CA"
 
 Remember your password as you will need it.
 
