@@ -21,9 +21,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public final class CertUtilities
 {
+
+  private static final String TAG = "CertUtilities";
 
   /**
    * look for the users key in /sdcard/Downloads and copy it into the
@@ -94,16 +97,10 @@ public final class CertUtilities
   private static KeyManager[] getKeyManagers(final Context context)
     throws CertException
   {
-    InputStream keystoreLocation = getKeystoreFile(context);
     KeyManagerFactory kmf;
 
     try {
-      // pkcs12 bundle password
-      SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-      String keystorePassword = sharedPref.getString(SettingsActivity.PREF_CERT_PASSWORD, "");
-
-      KeyStore keystore = KeyStore.getInstance("PKCS12");
-      keystore.load(keystoreLocation, keystorePassword.toCharArray());
+      KeyStore keystore = loadClientCredentials(context);
       kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
       kmf.init(keystore, "".toCharArray());
       return kmf.getKeyManagers();
@@ -122,16 +119,10 @@ public final class CertUtilities
   private static TrustManager[] getTrustManagers(final Context context)
     throws CertException
   {
-    InputStream truststoreLocation = getKeystoreFile(context);
     TrustManagerFactory tmf;
 
     try {
-      // pkcs12 bundle password
-      SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-      String truststorePassword = sharedPref.getString(SettingsActivity.PREF_CERT_PASSWORD, "");
-
-      KeyStore truststore = KeyStore.getInstance("PKCS12");
-      truststore.load(truststoreLocation, truststorePassword.toCharArray());
+      KeyStore truststore = loadClientCredentials(context);
       tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(truststore);
       return tmf.getTrustManagers();
@@ -140,6 +131,39 @@ public final class CertUtilities
     } 
   }
 
+  private static KeyStore credentials = null;
+
+  /**
+   * load and unlock the users pkcs12 credentials file
+   */
+  private static KeyStore loadClientCredentials(fint Context context)
+    throws CertException
+  {
+    if( credentials != null ){
+      Log.i(TAG, "credentials already loaded!");
+      return credentials;
+    }
+
+    // load credentials
+    InputStream credLocation = getKeystoreFile(context);
+    try {
+      // pkcs12 bundle password
+      SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+      String credPassword = sharedPref.getString(SettingsActivity.PREF_CERT_PASSWORD, "");
+
+      credentials = KeyStore.getInstance("PKCS12");
+      credentials.load(keystoreLocation, keystorePassword.toCharArray());
+      return credentials;
+
+    } catch (Exception e) {
+      displayMessage(context, context.getString(R.string.cert_password_warning));
+      throw new CertException("could not open client's credentials");
+    }
+
+    return null;
+  }
+
+  private static SSLContext sslContext = null;
   /**
    * this gives us the sslcontext from our pkcs12 key.
    *
@@ -149,13 +173,13 @@ public final class CertUtilities
   public static SSLContext getSSLContext(final Context cx)
     throws CertException
   {
-    SSLContext sslContext;
-
-    try {
-      sslContext = SSLContext.getInstance("TLS");
-      sslContext.init(getKeyManagers(cx), getTrustManagers(cx), new SecureRandom());
-    } catch (Exception e){
-      throw new CertException("bad ssl stuff: " + e);
+    if( sslContext == null ){
+      try {
+        sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(getKeyManagers(cx), getTrustManagers(cx), new SecureRandom());
+      } catch (Exception e){
+        throw new CertException("bad ssl stuff: " + e);
+      }
     }
 
     return sslContext;
