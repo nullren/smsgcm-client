@@ -22,30 +22,16 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
-public final class CertUtilities {
+public final class CertUtilities
+{
 
-  private static TrustManager[] getTrustManagers(final Context context) throws CertException {
-    TrustManagerFactory tmf;
-    try {
-      // CA cert store password
-      String truststorePassword = "blahblah";
-      // CA cert store
-      InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
-
-      KeyStore truststore = KeyStore.getInstance("BKS");
-      truststore.load(truststoreLocation, truststorePassword.toCharArray());
-      tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-      tmf.init(truststore);
-      return tmf.getTrustManagers();
-
-    } catch (Exception e) {
-      throw new CertException("could not load CA cert: " + e);
-    } 
-  }
-
-  public static void copyKeystoreFile(final Context context) throws CertException, IOException {
-    //throw new CertException("not created this function yet!");
-
+  /**
+   * look for the users key in /sdcard/Downloads and copy it into the
+   * apps internal storage.
+   */
+  public static void copyKeystoreFile(final Context context)
+    throws CertException, IOException
+  {
     // check we can read and write to storage
     String state = Environment.getExternalStorageState();
     if(!Environment.MEDIA_MOUNTED.equals(state)){
@@ -55,7 +41,7 @@ public final class CertUtilities {
 
     // look for the keystore in Download
     File path = Environment.getExternalStoragePublicDirectory(
-                  Environment.DIRECTORY_DOWNLOADS);
+                    Environment.DIRECTORY_DOWNLOADS);
     File unsecuredKeystore = new File(path, context.getString(R.string.cert_name));
     if( !unsecuredKeystore.exists() ){
       displayMessage(context, context.getString(R.string.cert_not_installed));
@@ -63,7 +49,9 @@ public final class CertUtilities {
     }
 
     // load location of internal spot
-    FileOutputStream securedKeystore = context.openFileOutput(context.getString(R.string.cert_name), Context.MODE_PRIVATE);
+    FileOutputStream securedKeystore =
+        context.openFileOutput(context.getString(R.string.cert_name)
+                              , Context.MODE_PRIVATE);
 
     // copy to internal spot
     FileChannel unsecureFile = new FileInputStream(unsecuredKeystore).getChannel();
@@ -86,7 +74,12 @@ public final class CertUtilities {
     }
   }
 
-  private static InputStream getKeystoreFile(final Context context) throws CertException {
+  /**
+   * open stream to the user's pkcs12 bundle
+   */
+  private static InputStream getKeystoreFile(final Context context)
+    throws CertException
+  {
     try {
       return context.openFileInput(context.getString(R.string.cert_name));
     } catch(Exception e) {
@@ -95,13 +88,17 @@ public final class CertUtilities {
     }
   }
 
-  private static KeyManager[] getKeyManagers(final Context context) throws CertException {
-
+  /**
+   * load client certificates
+   */
+  private static KeyManager[] getKeyManagers(final Context context)
+    throws CertException
+  {
     InputStream keystoreLocation = getKeystoreFile(context);
     KeyManagerFactory kmf;
 
     try {
-      // client cert password
+      // pkcs12 bundle password
       SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
       String keystorePassword = sharedPref.getString(SettingsActivity.PREF_CERT_PASSWORD, "");
 
@@ -116,7 +113,33 @@ public final class CertUtilities {
     }
   }
 
-  public static SSLContext getSSLContext(final Context cx) throws CertException {
+  /**
+   * load CA trust certificates
+   */
+  private static TrustManager[] getTrustManagers(final Context context)
+    throws CertException
+  {
+    TrustManagerFactory tmf;
+    try {
+      // CA cert store password
+      String truststorePassword = "blahblah";
+      // CA cert store
+      InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
+
+      KeyStore truststore = KeyStore.getInstance("BKS");
+      truststore.load(truststoreLocation, truststorePassword.toCharArray());
+      tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+      tmf.init(truststore);
+      return tmf.getTrustManagers();
+
+    } catch (Exception e) {
+      throw new CertException("could not load CA cert: " + e);
+    } 
+  }
+
+  public static SSLContext getSSLContext(final Context cx)
+    throws CertException
+  {
     SSLContext sslContext;
 
     try {
