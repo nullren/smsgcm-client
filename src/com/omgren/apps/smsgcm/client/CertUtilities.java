@@ -136,7 +136,7 @@ public final class CertUtilities
   /**
    * load and unlock the users pkcs12 credentials file
    */
-  private static KeyStore loadClientCredentials(fint Context context)
+  private static KeyStore loadClientCredentials(final Context context)
     throws CertException
   {
     if( credentials != null ){
@@ -152,15 +152,13 @@ public final class CertUtilities
       String credPassword = sharedPref.getString(SettingsActivity.PREF_CERT_PASSWORD, "");
 
       credentials = KeyStore.getInstance("PKCS12");
-      credentials.load(keystoreLocation, keystorePassword.toCharArray());
+      credentials.load(credLocation, credPassword.toCharArray());
       return credentials;
 
     } catch (Exception e) {
       displayMessage(context, context.getString(R.string.cert_password_warning));
       throw new CertException("could not open client's credentials");
     }
-
-    return null;
   }
 
   private static SSLContext sslContext = null;
