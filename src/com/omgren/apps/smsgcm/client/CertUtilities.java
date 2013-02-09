@@ -28,6 +28,10 @@ public final class CertUtilities
 
   private static final String TAG = "CertUtilities";
 
+  // save these guys for use later
+  private static SSLContext sslContext = null;
+  private static KeyStore credentials = null;
+
   /**
    * look for the users key in /sdcard/Downloads and copy it into the
    * apps internal storage.
@@ -112,9 +116,6 @@ public final class CertUtilities
 
   /**
    * load CA trust certificates. 
-   *
-   * TODO: clean this up so it is not so redundant with
-   * getKeyManagers. YUCK!
    */
   private static TrustManager[] getTrustManagers(final Context context)
     throws CertException
@@ -131,8 +132,6 @@ public final class CertUtilities
     } 
   }
 
-  private static KeyStore credentials = null;
-
   /**
    * load and unlock the users pkcs12 credentials file
    */
@@ -140,7 +139,7 @@ public final class CertUtilities
     throws CertException
   {
     if( credentials != null ){
-      Log.i(TAG, "credentials already loaded!");
+      //Log.i(TAG, "credentials already loaded!");
       return credentials;
     }
 
@@ -161,12 +160,8 @@ public final class CertUtilities
     }
   }
 
-  private static SSLContext sslContext = null;
   /**
    * this gives us the sslcontext from our pkcs12 key.
-   *
-   * TODO: cache the context so we don't need to keep looking for and
-   * loading these two keys (from the same file no less).
    */
   public static SSLContext getSSLContext(final Context cx)
     throws CertException
