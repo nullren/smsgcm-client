@@ -114,7 +114,10 @@ public final class CertUtilities
   }
 
   /**
-   * load CA trust certificates
+   * load CA trust certificates. 
+   *
+   * TODO: clean this up so it is not so redundant with
+   * getKeyManagers. YUCK!
    */
   private static TrustManager[] getTrustManagers(final Context context)
     throws CertException
@@ -137,6 +140,12 @@ public final class CertUtilities
     } 
   }
 
+  /**
+   * this gives us the sslcontext from our pkcs12 key.
+   *
+   * TODO: cache the context so we don't need to keep looking for and
+   * loading these two keys (from the same file no less).
+   */
   public static SSLContext getSSLContext(final Context cx)
     throws CertException
   {
