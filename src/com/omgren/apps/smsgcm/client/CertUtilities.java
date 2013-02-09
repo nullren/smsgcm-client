@@ -119,19 +119,19 @@ public final class CertUtilities
   private static TrustManager[] getTrustManagers(final Context context)
     throws CertException
   {
+    InputStream truststoreLocation = getKeystoreFile(context);
     TrustManagerFactory tmf;
-    try {
-      // CA cert store password
-      String truststorePassword = "blahblah";
-      // CA cert store
-      InputStream truststoreLocation = context.getResources().openRawResource(R.raw.trust_store);
 
-      KeyStore truststore = KeyStore.getInstance("BKS");
+    try {
+      // pkcs12 bundle password
+      SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+      String truststorePassword = sharedPref.getString(SettingsActivity.PREF_CERT_PASSWORD, "");
+
+      KeyStore truststore = KeyStore.getInstance("PKCS12");
       truststore.load(truststoreLocation, truststorePassword.toCharArray());
       tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(truststore);
       return tmf.getTrustManagers();
-
     } catch (Exception e) {
       throw new CertException("could not load CA cert: " + e);
     } 
