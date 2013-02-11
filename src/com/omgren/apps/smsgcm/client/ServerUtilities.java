@@ -121,7 +121,7 @@ public final class ServerUtilities {
   public static SmsMessageDummy[] downloadMessages(final Context context){
     String contents = "[]";
     try {
-      contents = HttpUtilities.get(context, SERVER_URL + "/messages");
+      contents = HttpUtilities.get(context, SERVER_URL + "/queued");
       Log.i(TAG, "downloaded messages: " + contents);
     } catch (IOException e) {
       String message = context.getString(R.string.server_connect_error, e.getMessage());
@@ -152,7 +152,7 @@ public final class ServerUtilities {
         args.put("time", msg.time.toString());
 
         try {
-          HttpUtilities.post(context, SERVER_URL + "/receiveMessage", args);
+          HttpUtilities.post(context, SERVER_URL + "/received", args);
         } catch(IOException e){
           Log.e(TAG, "Error uploading message: " + e);
           String message = context.getString(R.string.server_connect_error, e.getMessage());
