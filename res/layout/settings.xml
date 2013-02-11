@@ -7,6 +7,9 @@
     <EditTextPreference android:key="pref_cert_password"
                         android:title="@string/pref_cert_password"
                         android:summary="@string/pref_cert_password_summary"/>
+    <EditTextPreference android:key="pref_device_nickname"
+                        android:title="@string/pref_device_nickname"
+                        android:summary="@string/pref_device_nickname_summary"/>
     <!--<Preference android:title="@string/pref_cert_import"
                 android:summary="@string/pref_cert_import_summary">
       <intent android:action="com.omgren.apps.smsgcm.client.IMPORT_KEY"/>

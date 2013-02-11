@@ -45,6 +45,8 @@
     <string name="pref_cert_password">PKCS12 Password</string>
     <string name="pref_cert_password_summary">This is the password you used when creating your .p12 file.</string>
     <string name="pref_cert_title">Security Settings</string>
+    <string name="pref_device_nickname">Device Nickname</string>
+    <string name="pref_device_nickname_summary">Give a nickname to your device to more easily manage it and its settings on the server.</string>
     <string name="recv_sms">&lt;&lt; RECV SMS &gt;&gt; %1$s: %2$s</string>
     <string name="sent_sms">&lt;&lt; SENT SMS &gt;&gt; %1$s: %2$s</string>
     <string name="server_aborted">Gave up connecting to server.</string>
