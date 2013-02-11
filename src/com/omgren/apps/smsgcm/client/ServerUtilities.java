@@ -49,6 +49,8 @@ public final class ServerUtilities {
     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
     String nickname = sharedPref.getString(SettingsActivity.PREF_DEVICE_NICKNAME, "unnamed");
 
+    params.put("nickname", nickname);
+
     long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
     // Once GCM returns a registration id, we need to register it in the
     // demo server. As the server might be down, we will retry it a couple
